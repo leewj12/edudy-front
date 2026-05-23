@@ -110,9 +110,11 @@ function Login() {
           </button>
         </form>
 
-        {/* <div className="text-center mt-4 text-sm text-gray-500">
-          <a href="#" className="hover:underline">비밀번호 찾기</a>
-        </div> */}
+        <div className="text-center mt-4 text-sm text-gray-400">
+          <Link to={PATH.Login} className="hover:text-[#00C59E] hover:underline">
+            일반 로그인
+          </Link>
+        </div>
       </div>
     </div>
   );

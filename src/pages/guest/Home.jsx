@@ -109,9 +109,12 @@ export default function Home() {
       </section>
 
       {/* 인기 강의 섹션 */}
-      <section className="px-4 md:px-[128px] py-8 mt-3">
-        <h2 className="text-2xl font-semibold mb-4">수강신청 많은 강의</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section className="px-4 md:px-[128px] py-10 mt-3">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-7 bg-[#00C59E] rounded-full"></div>
+          <h2 className="text-2xl font-bold">수강신청 많은 강의</h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {!loading && filteredLectures?.length > 0 ? (
             filteredLectures.map((lecture) => {
               const thumbnail = lecture.lectureThumbnail
@@ -127,27 +130,29 @@ export default function Home() {
                 <Link
                   key={lecture.lectureId}
                   to={`/lecture/${lecture.lectureId}`}
-                  className="w-full border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition block"
+                  className="group w-full rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block border border-gray-100"
                 >
-                  <img
-                    src={thumbnail}
-                    alt={title}
-                    className="w-full h-[16rem] object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/no21.png";
-                    }}
-                  />
-                  <div className="h-[6rem] p-3 flex flex-col justify-between text-sm">
-                    <div className="font-semibold">{title}</div>
-                    <div className="flex items-center gap-3 text-xs mt-1">
-                      <div className="flex items-center">
+                  <div className="overflow-hidden">
+                    <img
+                      src={thumbnail}
+                      alt={title}
+                      className="w-full h-[14rem] md:h-[16rem] object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/no21.png";
+                      }}
+                    />
+                  </div>
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="font-bold text-base line-clamp-1">{title}</div>
+                    <div className="flex items-center gap-3 text-xs">
+                      <div className="flex items-center text-yellow-500">
                         <img src="/1star.png" alt="별점" className="w-4 h-4 mr-1" />
                         {score} ({reviewCount})
                       </div>
-                      <div className="text-gray-500">전액 지원</div>
+                      <span className="bg-[#00C59E]/10 text-[#00C59E] font-medium px-2 py-0.5 rounded-full">전액 지원</span>
                     </div>
-                    <div className="text-xs mt-1">기간: {start} ~ {end}</div>
+                    <div className="text-xs text-gray-500">기간: {start} ~ {end}</div>
                   </div>
                 </Link>
               );
@@ -156,15 +161,15 @@ export default function Home() {
             Array.from({ length: 3 }).map((_, idx) => (
               <div
                 key={`dummy-${idx}`}
-                className="w-full border border-gray-300 rounded-lg overflow-hidden bg-gray-50 text-center flex flex-col"
+                className="w-full rounded-xl overflow-hidden bg-gray-50 text-center flex flex-col border border-gray-100"
               >
                 <img
                   src="/no21.png"
                   alt="추천 준비 중"
-                  className="w-full h-[16rem] object-cover"
+                  className="w-full h-[14rem] md:h-[16rem] object-cover"
                 />
-                <div className="h-[6rem] p-3 flex flex-col justify-center items-center text-sm text-gray-500">
-                  <div className="text-lg font-semibold">추천 강의를 준비 중입니다.</div>
+                <div className="p-4 flex flex-col justify-center items-center text-sm text-gray-400">
+                  <div className="text-base font-semibold">추천 강의를 준비 중입니다.</div>
                 </div>
               </div>
             ))

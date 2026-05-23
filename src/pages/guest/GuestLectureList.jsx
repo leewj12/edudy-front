@@ -230,8 +230,8 @@ export default function LectureList() {
 
         <div className="w-full border-b border-gray-300 mb-4"></div>
 
-        {/* 🔹 강의 카드 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {/* 강의 카드 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {filteredLectures?.map((lecture) => {
             const thumbnail = lecture.lectureThumbnail
               ? `${imageBaseUrl}/upload/lecture/thumbnail/${lecture.lectureThumbnail}`
@@ -246,27 +246,29 @@ export default function LectureList() {
               <Link
                 to={`/lecture/${lecture.lectureId}`}
                 key={lecture.lectureId}
-                className="w-full border border-gray-300 rounded-lg overflow-hidden hover:shadow-md transition block"
+                className="group w-full rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 block border border-gray-100"
               >
-                <img
-                  src={thumbnail}
-                  alt={title}
-                  className="w-full h-[16rem] object-cover"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/no21.png";
-                  }}
-                />
-                <div className="h-[6rem] p-3 flex flex-col justify-between text-sm">
-                  <div className="font-semibold">{title}</div>
-                  <div className="flex items-center gap-3 text-xs mt-1">
-                    <div className="flex items-center">
+                <div className="overflow-hidden">
+                  <img
+                    src={thumbnail}
+                    alt={title}
+                    className="w-full h-[14rem] md:h-[16rem] object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/no21.png";
+                    }}
+                  />
+                </div>
+                <div className="p-4 flex flex-col gap-2">
+                  <div className="font-bold text-base line-clamp-1">{title}</div>
+                  <div className="flex items-center gap-3 text-xs">
+                    <div className="flex items-center text-yellow-500">
                       <img src="/1star.png" alt="별점" className="w-4 h-4 mr-1" />
                       {score} ({reviewCount})
                     </div>
-                    <div className="text-gray-500">전액 지원</div>
+                    <span className="bg-[#00C59E]/10 text-[#00C59E] font-medium px-2 py-0.5 rounded-full">전액 지원</span>
                   </div>
-                  <div className="text-xs mt-1">기간: {start} ~ {end}</div>
+                  <div className="text-xs text-gray-500">기간: {start} ~ {end}</div>
                 </div>
               </Link>
             );

@@ -252,17 +252,23 @@ export default function LectureDetail() {
     <UserLayout>
       <div className="pt-6 md:pt-10">
         <div className="px-4 md:px-[128px]">
-          <div className="flex flex-col md:flex-row md:justify-between mb-3 gap-4">
-            <div>
-              <p className="text-sm text-gray-500">{category}</p>
-              <h2 className="text-xl md:text-2xl font-bold mt-1">{title}</h2>
-              <p className="text-sm md:text-base mt-1 text-gray-600">{description}</p>
-              <div className="mt-2 text-gray-600 text-sm font-bold">{renderStars(rating)} [{rating}]</div>
-              <br />
-              <p className="text-sm md:text-base mt-1 text-gray-600">강의 기간: {startDate} ~ {endDate}</p>
-              <div className="mt-2 text-gray-600 text-sm md:text-base">비용: 훈련비 전액 지원</div>
+          <div className="flex flex-col md:flex-row md:justify-between mb-3 gap-6">
+            <div className="flex-1">
+              <span className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1 rounded-full">{category}</span>
+              <h2 className="text-xl md:text-2xl font-bold mt-3">{title}</h2>
+              <p className="text-sm md:text-base mt-2 text-gray-600 leading-relaxed">{description}</p>
+              <div className="mt-3 text-gray-600 text-sm font-bold">{renderStars(rating)} [{rating}]</div>
+              <div className="mt-4 space-y-1.5">
+                <p className="text-sm md:text-base text-gray-600 flex items-center gap-2">
+                  <span className="text-gray-400">기간</span> {startDate} ~ {endDate}
+                </p>
+                <p className="text-sm md:text-base text-gray-600 flex items-center gap-2">
+                  <span className="text-gray-400">비용</span>
+                  <span className="text-[#00C59E] font-semibold">훈련비 전액 지원</span>
+                </p>
+              </div>
             </div>
-            <img src={thumbnail} alt="썸네일" className="w-full md:w-auto h-[12rem] md:h-[205px] object-cover rounded" onError={(e) => {
+            <img src={thumbnail} alt="썸네일" className="w-full md:w-auto h-[12rem] md:h-[220px] object-cover rounded-xl shadow-sm" onError={(e) => {
               e.target.onerror = null;
               e.target.src = "/no21.png";
             }} />
@@ -288,40 +294,46 @@ export default function LectureDetail() {
         </div>
 
         <div ref={curriculumRef} className="mb-10 px-4 md:px-[128px]">
-          <h3 className="text-xl font-bold mb-4">과목</h3>
-          <table className="w-full border border-gray-300">
-            <tbody>
-              {curriculum.length > 0 ? (
-                curriculum.map((item, idx) => (
-                  <tr key={idx} className="border-t border-gray-300">
-                    <td className="p-3">{item}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr><td className="p-3 text-sm text-gray-500">과목 정보가 없습니다.</td></tr>
-              )}
-            </tbody>
-          </table>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-1 h-6 bg-[#00C59E] rounded-full"></div>
+            <h3 className="text-xl font-bold">과목</h3>
+          </div>
+          <div className="rounded-xl border border-gray-200 overflow-hidden">
+            {curriculum.length > 0 ? (
+              curriculum.map((item, idx) => (
+                <div key={idx} className={`flex items-center gap-3 px-5 py-3.5 ${idx > 0 ? 'border-t border-gray-100' : ''} hover:bg-gray-50 transition-colors`}>
+                  <span className="text-[#00C59E] font-bold text-sm">{String(idx + 1).padStart(2, '0')}</span>
+                  <span className="text-sm">{item}</span>
+                </div>
+              ))
+            ) : (
+              <div className="px-5 py-4 text-sm text-gray-400">과목 정보가 없습니다.</div>
+            )}
+          </div>
         </div>
 
-        <div ref={reviewRef} className="px-4 md:px-[128px]">
-          <h3 className="text-xl font-bold mb-4">수강평({reviews.length})</h3>
+        <div ref={reviewRef} className="px-4 md:px-[128px] pb-32">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-1 h-6 bg-[#00C59E] rounded-full"></div>
+            <h3 className="text-xl font-bold">수강평 ({reviews.length})</h3>
+          </div>
           {reviews.length > 0 ? (
             reviews.map((r, idx) => (
-              <div key={idx} className="mb-4 border rounded border-gray-300 p-4">
-                <p className="text-sm font-semibold">{r.email}</p>
-                <p className="text-sm mt-1 text-gray-700">{r.comment}</p>
+              <div key={idx} className="mb-3 rounded-xl border border-gray-200 p-4 hover:border-gray-300 transition-colors">
+                <p className="text-sm font-semibold text-gray-800">{r.email}</p>
+                <p className="text-sm mt-1.5 text-gray-600 leading-relaxed">{r.comment}</p>
               </div>
             ))
           ) : (
-            <p className="text-sm text-gray-500">아직 수강평이 없습니다.</p>
+            <p className="text-sm text-gray-400">아직 수강평이 없습니다.</p>
           )}
         </div>
       </div>
 
       <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
-        <button onClick={() => setShowAskModal(true)} className="flex items-center gap-3 bg-black text-white px-4 md:px-6 py-3 rounded-full shadow-lg text-sm cursor-pointer">
-          <span className="text-red-400 font-bold">마감까지 D-{dDay}</span>
+        <button onClick={() => setShowAskModal(true)} className="flex items-center gap-3 bg-[#192a48] hover:bg-[#00C59E] text-white px-5 md:px-8 py-3.5 rounded-full shadow-xl text-sm cursor-pointer transition-colors duration-300">
+          <span className="text-red-300 font-bold">D-{dDay}</span>
+          <span className="w-px h-4 bg-white/30"></span>
           <span className="font-semibold">수강 신청하기</span>
         </button>
       </div>
