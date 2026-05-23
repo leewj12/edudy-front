@@ -2,7 +2,7 @@ import React from "react";
 
 export default function UserFooter() {
   return (
-    <footer className="px-[128px] mt-auto bg-white py-6 text-sm text-gray-500 border-t px-8 border-gray-200">
+    <footer className="mt-auto bg-white py-6 text-sm text-gray-500 border-t border-gray-200 px-4 md:px-[128px]">
       {/* <div className="space-y-1 leading-relaxed">
         <p>(주) 에듀디</p>
         <p>대표: 박형배</p>

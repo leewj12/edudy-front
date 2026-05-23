@@ -14,7 +14,7 @@ export default function Header() {
   const roleMap = {
     ROLE_ADMIN: "관리자",
     ROLE_USER: "사용자",
-    ROLE_INSTR: "강사",
+    ROLE_INSTRUCTOR: "강사",
   };
 
 
@@ -63,13 +63,20 @@ export default function Header() {
 
       {/* 관리자 정보 및 로그아웃 */}
       <div className="flex items-center space-x-3">
-        
+
           <div
             className="text-xs text-gray-700 font-medium hover:underline cursor-pointer"
             onClick={() => navigate('/admin/mypage')}
           >
             {roleMap[userRole]} <span className="font-bold">{userName}</span> 님
           </div>
+
+          <button
+            className="bg-blue-50 hover:bg-blue-100 text-xs text-blue-700 px-3 py-1 rounded border border-blue-300 cursor-pointer"
+            onClick={() => navigate('/')}
+          >
+            서비스 사이트
+          </button>
 
           <button
             className="bg-gray-100 hover:bg-gray-200 text-xs text-gray-700 px-3 py-1 rounded border border-gray-300 cursor-pointer"

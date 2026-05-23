@@ -200,10 +200,10 @@ export default function LectureList() {
   return (
     <UserLayout>
       <div className="w-full border-b border-gray-300 mb-6"></div>
-      <div className="px-[128px] pb-12">
+      <div className="px-4 md:px-[128px] pb-12">
         {/* 🔹 카테고리 & 정렬 */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex gap-5 text-sm font-medium">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+          <div className="flex flex-wrap gap-3 md:gap-5 text-sm font-medium">
             {categoryList.map((cat) => (
               <button
                 key={cat.lectureCategoryId}

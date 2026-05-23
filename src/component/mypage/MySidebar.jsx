@@ -15,29 +15,52 @@ export default function MySidebar() {
   ];
 
   return (
-    <aside className="fixed top-[120px] left-0 w-85 h-[calc(100vh-80px)] bg-gray-50 p-6 overflow-y-auto z-40 pl-[128px]">
-      <div className="my-5">
-        <p className="text-lg font-bold">{userInfo?.userName || '이름 없음'}님</p>
-        <p className="text-sm text-gray-500 mt-1">{userInfo?.lectureTitle || '진행중인 과정 없음'}</p>
-        <hr className="my-4 border-gray-300" />
-      </div>
-      <ul className="space-y-5">
-        {menuList.map((item) => (
-          <li key={item.path}>
+    <>
+      {/* 모바일: 상단 탭 바 */}
+      <div className="md:hidden bg-gray-50 border-b border-gray-200 px-4 py-3">
+        <p className="text-sm font-bold mb-2">{userInfo?.userName || '이름 없음'}님 · <span className="font-normal text-gray-500">{userInfo?.lectureTitle || '진행중인 과정 없음'}</span></p>
+        <div className="flex gap-2 overflow-x-auto">
+          {menuList.map((item) => (
             <Link
+              key={item.path}
               to={item.path}
-              className={`flex justify-between items-center pr-2 transition-colors duration-150 rounded px-2 cursor-pointer
+              className={`whitespace-nowrap px-3 py-1.5 rounded-full text-sm transition-colors
                 ${location.pathname === item.path
-                  ? 'text-black font-bold hover:text-[#00C59E] hover:bg-gray-100'
-                  : 'text-gray-400 hover:text-[#00C59E] hover:bg-gray-100'
+                  ? 'bg-[#192a48] text-white'
+                  : 'bg-white text-gray-600 border border-gray-300'
                 }`}
             >
-              <span>{item.label}</span>
-              <span className="text-xs">&gt;</span>
+              {item.label}
             </Link>
-          </li>
-        ))}
-      </ul>
-    </aside>
+          ))}
+        </div>
+      </div>
+
+      {/* 데스크톱: 고정 사이드바 */}
+      <aside className="hidden md:block fixed top-[120px] left-0 w-85 h-[calc(100vh-80px)] bg-gray-50 p-6 overflow-y-auto z-40 pl-[128px]">
+        <div className="my-5">
+          <p className="text-lg font-bold">{userInfo?.userName || '이름 없음'}님</p>
+          <p className="text-sm text-gray-500 mt-1">{userInfo?.lectureTitle || '진행중인 과정 없음'}</p>
+          <hr className="my-4 border-gray-300" />
+        </div>
+        <ul className="space-y-5">
+          {menuList.map((item) => (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className={`flex justify-between items-center pr-2 transition-colors duration-150 rounded px-2 cursor-pointer
+                  ${location.pathname === item.path
+                    ? 'text-black font-bold hover:text-[#00C59E] hover:bg-gray-100'
+                    : 'text-gray-400 hover:text-[#00C59E] hover:bg-gray-100'
+                  }`}
+              >
+                <span>{item.label}</span>
+                <span className="text-xs">&gt;</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </>
   );
 }

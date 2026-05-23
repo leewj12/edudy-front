@@ -250,27 +250,27 @@ export default function LectureDetail() {
 
   return (
     <UserLayout>
-      <div className="pt-10">
-        <div className="px-[128px]">
-          <div className="flex justify-between mb-3">
+      <div className="pt-6 md:pt-10">
+        <div className="px-4 md:px-[128px]">
+          <div className="flex flex-col md:flex-row md:justify-between mb-3 gap-4">
             <div>
               <p className="text-sm text-gray-500">{category}</p>
-              <h2 className="text-2xl font-bold mt-1">{title}</h2>
-              <p className="text-m mt-1 text-gray-600">{description}</p>
+              <h2 className="text-xl md:text-2xl font-bold mt-1">{title}</h2>
+              <p className="text-sm md:text-base mt-1 text-gray-600">{description}</p>
               <div className="mt-2 text-gray-600 text-sm font-bold">{renderStars(rating)} [{rating}]</div>
               <br />
-              <p className="text-m mt-1 text-gray-600">강의 기간: {startDate} ~ {endDate}</p>
-              <div className="mt-2 text-gray-600 text-m">비용: 훈련비 전액 지원</div>
+              <p className="text-sm md:text-base mt-1 text-gray-600">강의 기간: {startDate} ~ {endDate}</p>
+              <div className="mt-2 text-gray-600 text-sm md:text-base">비용: 훈련비 전액 지원</div>
             </div>
-            <img src={thumbnail} alt="썸네일" className="h-[205px] object-cover" onError={(e) => {
+            <img src={thumbnail} alt="썸네일" className="w-full md:w-auto h-[12rem] md:h-[205px] object-cover rounded" onError={(e) => {
               e.target.onerror = null;
               e.target.src = "/no21.png";
             }} />
           </div>
         </div>
 
-        <div className="sticky top-[120px] z-40 bg-white border-y border-gray-200 w-full">
-          <div className="flex gap-10 font-semibold text-sm px-[128px]">
+        <div className="sticky top-[60px] md:top-[120px] z-40 bg-white border-y border-gray-200 w-full">
+          <div className="flex gap-6 md:gap-10 font-semibold text-sm px-4 md:px-[128px]">
             <button onClick={() => scrollTo(introRef, "intro")}
               className={`py-3 ${activeTab === "intro" ? "text-[#00C59E] border-b-2 border-[#00C59E]" : "text-gray-700"}`}>강의 소개</button>
             <button onClick={() => scrollTo(curriculumRef, "curriculum")}
@@ -280,14 +280,14 @@ export default function LectureDetail() {
           </div>
         </div>
 
-        <div ref={introRef} className="pt-0 px-[128px]">
+        <div ref={introRef} className="pt-0 px-4 md:px-[128px]">
           <img src={introImage} alt="강의소개" className="w-full mb-10" onError={(e) => {
             e.target.onerror = null;
             e.target.src = "/no21.png";
           }} />
         </div>
 
-        <div ref={curriculumRef} className="mb-10 px-[128px]">
+        <div ref={curriculumRef} className="mb-10 px-4 md:px-[128px]">
           <h3 className="text-xl font-bold mb-4">과목</h3>
           <table className="w-full border border-gray-300">
             <tbody>
@@ -304,7 +304,7 @@ export default function LectureDetail() {
           </table>
         </div>
 
-        <div ref={reviewRef} className="px-[128px]">
+        <div ref={reviewRef} className="px-4 md:px-[128px]">
           <h3 className="text-xl font-bold mb-4">수강평({reviews.length})</h3>
           {reviews.length > 0 ? (
             reviews.map((r, idx) => (
@@ -320,7 +320,7 @@ export default function LectureDetail() {
       </div>
 
       <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50">
-        <button onClick={() => setShowAskModal(true)} className="flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full shadow-lg text-sm cursor-pointer">
+        <button onClick={() => setShowAskModal(true)} className="flex items-center gap-3 bg-black text-white px-4 md:px-6 py-3 rounded-full shadow-lg text-sm cursor-pointer">
           <span className="text-red-400 font-bold">마감까지 D-{dDay}</span>
           <span className="font-semibold">수강 신청하기</span>
         </button>

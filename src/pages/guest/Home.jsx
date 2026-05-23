@@ -55,14 +55,14 @@ export default function Home() {
               <img
                 src={bannerImages[currentSlide].imageUrl}
                 alt="메인 슬라이드"
-                className="w-full h-[30rem] object-cover cursor-pointer"
+                className="w-full h-[15rem] md:h-[30rem] object-cover cursor-pointer"
               />
             </Link>
           ) : (
             <img
               src={bannerImages[currentSlide].imageUrl}
               alt="메인 슬라이드"
-              className="w-full h-[30rem] object-cover"
+              className="w-full h-[15rem] md:h-[30rem] object-cover"
             />
           )}
             {/* ◀ 이전 버튼 */}
@@ -70,7 +70,7 @@ export default function Home() {
               onClick={() =>
                 setCurrentSlide((prev) => (prev - 1 + bannerImages.length) % bannerImages.length)
               }
-              className="absolute left-[128px] top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full shadow transition"
+              className="absolute left-4 md:left-[128px] top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full shadow transition"
               aria-label="이전 배너"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +81,7 @@ export default function Home() {
             {/* ▶ 다음 버튼 */}
             <button
               onClick={() => setCurrentSlide((prev) => (prev + 1) % bannerImages.length)}
-              className="absolute right-[128px] top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full shadow transition"
+              className="absolute right-4 md:right-[128px] top-1/2 transform -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full shadow transition"
               aria-label="다음 배너"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,7 +109,7 @@ export default function Home() {
       </section>
 
       {/* 인기 강의 섹션 */}
-      <section className="px-[128px] py-8 mt-3">
+      <section className="px-4 md:px-[128px] py-8 mt-3">
         <h2 className="text-2xl font-semibold mb-4">수강신청 많은 강의</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {!loading && filteredLectures?.length > 0 ? (

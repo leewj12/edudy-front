@@ -27,12 +27,12 @@ export default function MyLayout({ children }) {
     <>
       <UserHeaderSimple />
 
-      <div className="relative flex">
+      <div className="relative flex flex-col md:flex-row">
         {/* 사이드바 */}
         <MySidebar name={user.name} lectureName={user.lectureName}/>
 
         {/* 콘텐츠 영역 */}
-        <main className="ml-85 flex-1 p-10">{children}</main>
+        <main className="md:ml-85 flex-1 p-4 md:p-10">{children}</main>
       </div>
 
       <UserQa />
