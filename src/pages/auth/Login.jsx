@@ -51,7 +51,6 @@ function Login() {
       alert('로그인 성공!');
       navigate(PATH.Root);
     } catch (err) {
-      console.log(err.response)
       const errData = err.response;
       if (errData?.status === 400) {
         setErrors(errData.data);

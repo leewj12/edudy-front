@@ -42,8 +42,6 @@ export default function AdminSurveyList() {
           axios.get(`/admin/lecture/part/list/${selectedCourseId}`),
         ]);
 
-        console.log('📦 설문 목록:', surveyRes.data);
-        console.log('📦 수강생 목록:', studentRes.data);
 
         const studentMap = {};
         studentRes.data.forEach(part => {
@@ -77,7 +75,6 @@ export default function AdminSurveyList() {
   useEffect(() => {
     if (modalItem) {
       axios.get(`/user/survey/${modalItem.lectureSurveyId}`).then(res => {
-        console.log('📦 설문 상세 응답:', res.data);
         setModalDetail(res.data);
       });
     }
@@ -95,7 +92,6 @@ export default function AdminSurveyList() {
     });
   
     axios.get(`/user/survey/${modalItem.lectureSurveyId}`).then(res => {
-      console.log('📦 설문 상세 응답:', res.data);
       setModalDetail(res.data);
     });
   }, [modalItem]);

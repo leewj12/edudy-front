@@ -228,7 +228,6 @@ export default function AdminNavigation() {
       });
       setPriorityList(priorityArr);
       setAllLectures(res.data);
-      console.log(res.data);
     } catch (e) {
       console.error('강의 목록 불러오기 실패', e);
     }

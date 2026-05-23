@@ -53,7 +53,6 @@ function Login() {
     } catch (err) {
       
       const errData = err.response;
-      console.log(errData);
       if (errData?.status === 400) {
         setErrors(errData.data);
       } else if (errData?.status === 401) {

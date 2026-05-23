@@ -21,7 +21,6 @@ export default function UserList() {
   const fetchUsers = async () => {
     try {
       const res = await axios.get('/admin/users/list');
-      console.log('✅ 유저 목록:', res.data);
       setUsers(res.data);
       setFiltered(res.data);
     } catch (err) {

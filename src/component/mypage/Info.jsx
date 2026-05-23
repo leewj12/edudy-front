@@ -15,7 +15,6 @@ export default function Info() {
   useEffect(() => {
     axios.get('/user/me')
       .then((res) => {
-        console.log("화면에 보여주는 데이터",res.data)
         setUserInfo(res.data);
         setForm({
           name: res.data.name,
@@ -106,14 +105,11 @@ export default function Info() {
         userAddressDetail: form.addressDetail,
         userMarketing: form.marketing,
       };
-      console.log("보내는데이터 :",payload)
-
       await axios.patch('/user/me', payload);
       toast.success('수정된 정보를 저장했습니다.');
 
       
       const res = await axios.get('/user/me');
-      console.log("갱신하는 데이터 :", res.data);
       // form과 userInfo 상태 갱신
       setUserInfo(res.data);
       setForm({

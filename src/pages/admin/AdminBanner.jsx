@@ -67,7 +67,6 @@ export default function AdminBanner() {
       if (imageFile) formData.append('bannerImageFile', imageFile);
 
       for (let [k, v] of formData.entries()) {
-        console.log(`${k}:`, v);
       }
 
       if (selectedLecture.bannerId) {

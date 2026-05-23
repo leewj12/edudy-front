@@ -365,7 +365,6 @@ export default function LectureForm() {
     const fetchCategories = async () => {
       try {
         const res = await axios.get('/admin/category/list'); // ← API 경로 맞게 조정
-        console.log(res.data);
         setCategoryList(res.data);
       } catch (err) {
         console.error("카테고리 목록 불러오기 실패", err);
@@ -478,7 +477,6 @@ export default function LectureForm() {
   
     try {
       for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
       }
   
       await axios.post('/admin/lecture/subjects', formData, {

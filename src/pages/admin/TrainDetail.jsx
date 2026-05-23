@@ -65,7 +65,6 @@ export default function TrainDetail() {
         setLectureStart(firstItem.lectureStart || '');
         setLectureEnd(firstItem.lectureEnd || '');
       }
-      console.log("불러온데이터",res.data);
     } catch (err) {
       console.error("훈련일지 목록 불러오기 실패", err);
     }
@@ -126,11 +125,9 @@ export default function TrainDetail() {
         // 등록 요청
         await axios.post(`/admin/train`, payload);
       }
-      console.log("보내는 데이터 :", payload);
       await fetchTrainingList(); // 목록 새로고침
       handleCloseModal();        // 모달 닫기
     } catch (err) {
-      console.log("보내는 데이터 :", payload);
       console.error("훈련일지 저장 실패", err);
     }
   };

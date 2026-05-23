@@ -33,13 +33,11 @@ export default function LecturePartList() {
         return;
       }
 
-      console.log('✅ 과정 목록:', courses);
       setCourseList(courses);
       const firstCourseId = courses[0].lectureId;
       setSelectedCourse(firstCourseId);
 
       const partRes = await axios.get(`/admin/lecture/part/list/${firstCourseId}`);
-      console.log('✅ 수강생 응답 데이터:', partRes.data);
 
       const valid = partRes.data
         .filter(item => item.status !== 'DROPPED')
@@ -90,7 +88,6 @@ export default function LecturePartList() {
       if (!selectedCourse) return;
       try {
         const partRes = await axios.get(`/admin/lecture/part/list/${selectedCourse}`);
-        console.log('🔄 선택한 과정 수강생 응답:', partRes.data);
   
         const valid = partRes.data
           .filter(item => item.status !== 'DROPPED')

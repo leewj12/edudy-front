@@ -15,7 +15,6 @@ export default function MyLayout({ children }) {
     try {
       if (accessToken) {
         const decoded = jwtDecode(accessToken);
-        console.log(decoded)
         const name = decoded.name || decoded.userName || '';
         setUser(prev => ({ ...prev, name }));
       }

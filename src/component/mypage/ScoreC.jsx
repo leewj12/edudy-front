@@ -11,7 +11,6 @@ export default function ScoreC() {
       try {
         if (!userInfo?.partId) return;
         const res = await axios.get(`/user/score/list/${userInfo.partId}`);
-        console.log("불러온데이터",res.data)
         if (Array.isArray(res.data)) {
           setScores(res.data);
         } else {

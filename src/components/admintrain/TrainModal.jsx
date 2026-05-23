@@ -12,7 +12,6 @@ export default function TrainModal({
   mode = 'create', // 'create' | 'edit' | 'view'
   lectureId, 
 }) {
-  console.log('모달 모드:', mode);
   const isViewMode = mode === 'view';
 
   const [date, setDate] = useState('');
@@ -103,7 +102,6 @@ export default function TrainModal({
       })),
     };
   
-    console.log("보내는 payload", payload);
     onSave(payload);
   };
 

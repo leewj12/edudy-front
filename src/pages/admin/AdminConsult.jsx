@@ -78,7 +78,6 @@ const getKeywordLabel = (type, keyword) => {
 
   const fetchConsults = (lectureId) => {
     axios.get(`/admin/consult/list/${lectureId}`).then(res => {
-      console.log('📥 상담 리스트 응답:', res.data); // 👈 추가
       setConsults(res.data);
     });
   };
@@ -120,14 +119,12 @@ const getKeywordLabel = (type, keyword) => {
       fetchConsults(course.lectureId);
     });
     axios.get(`/admin/staff/lecture/${course.lectureId}`).then((res) => {
-      console.log("🔍 강사 목록 데이터:", res.data);  // 🔍 확인 포인트
       setStaffs(res.data);
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('💬 저장 시 consultId:', editingConsultId);
     if (!form.lecturePartId || !form.lectureStaffId) {
       alert('학생과 담당자를 모두 선택해주세요.');
       return;
