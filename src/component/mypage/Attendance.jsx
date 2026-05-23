@@ -15,6 +15,7 @@ export default function Attendance() {
 
   const [qrUrl, setQrUrl] = useState("");
   const [showQR, setShowQR] = useState(false);
+  const [todayAttId, setTodayAttId] = useState(null);
 
   const fetchAttendanceData = async () => {
     try {
@@ -33,6 +34,13 @@ export default function Attendance() {
       const todayStr = dayjs().format('YYYY-MM-DD');
       if (formatted[todayStr]) {
         setTodayStatus(formatted[todayStr].status);
+      }
+
+      const todayRecord = res.data.find(
+        (item) => dayjs(item.attDate).format('YYYY-MM-DD') === todayStr
+      );
+      if (todayRecord) {
+        setTodayAttId(todayRecord.lectureAttId);
       }
     } catch (err) {
       console.error('❌ 출석 조회 실패:', err);
@@ -57,7 +65,7 @@ export default function Attendance() {
     const handleOpenQR = () => {
       setShowQR(true);
       const uuidToken = crypto.randomUUID();
-      setQrUrl(`http://192.168.0.10:5173/qr/attend?token=${uuidToken}`);
+      setQrUrl(`${window.location.origin}/qr/attend?token=${uuidToken}`);
   
       setTimeout(async () => {
         try {
@@ -87,10 +95,6 @@ export default function Attendance() {
 
   const handleCloseQR = () => {
     setShowQR(false);
-    if (qrIntervalId) {
-      clearInterval(qrIntervalId);
-      setQrIntervalId(null);
-    }
   };
 
   if (!startDate || !endDate) {
@@ -138,21 +142,22 @@ export default function Attendance() {
 
   // 버튼 클릭 핸들러
   const handleAction = async (actionType) => {
-    const now = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    const now = dayjs().format('YYYY-MM-DDTHH:mm:ss');
     try {
       if (actionType === 'entry') {
-        await axios.post('/user/att/entry', { datetime: now });
+        await axios.post('/user/att/entry', { lecturePartId: userInfo?.partId, time: now });
         setTodayStatus('ENTRY');
       } else if (actionType === 'outingStart') {
-        await axios.post(`/user/att/outing/start/${lectureAttId}`, { datetime: now });
+        await axios.post('/user/att/outing/start', { lectureAttId: todayAttId, time: now });
         setTodayStatus('OUTING');
       } else if (actionType === 'outingEnd') {
-        await axios.post(`/user/att/outing/end/${lectureAttId}`, { datetime: now });
+        await axios.post('/user/att/outing/end', { lectureAttId: todayAttId, time: now });
         setTodayStatus('RETURNED');
       } else if (actionType === 'exit') {
-        await axios.post(`/user/att/exit/${lectureAttId}`, { datetime: now });
+        await axios.post('/user/att/exit', { lectureAttId: todayAttId, time: now });
         setTodayStatus('EXIT');
       }
+      await fetchAttendanceData();
     } catch (err) {
       console.error('에러 발생:', err);
     }

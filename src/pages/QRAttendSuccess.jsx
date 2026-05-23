@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../api/axiosInstance";
 
 export default function QRAttendSuccess() {
   const [params] = useSearchParams();
@@ -10,7 +10,7 @@ export default function QRAttendSuccess() {
 
   useEffect(() => {
     if (token) {
-        axios.post(`http://192.168.0.10:8083/api/qr/confirm?token=${token}`)
+        axios.post(`/qr/confirm?token=${token}`)
         .then(() => {
           localStorage.setItem(`qr_token_${token}`, "CHECKED");
           setTimeout(() => {

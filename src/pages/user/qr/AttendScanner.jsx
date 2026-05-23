@@ -1,6 +1,4 @@
-//import { useEffect } from 'react';
-//import { useSearchParams } from 'react-router-dom';
-// import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function AttendScanner() {
   //const [searchParams] = useSearchParams();

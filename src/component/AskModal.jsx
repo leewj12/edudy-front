@@ -1,7 +1,7 @@
 // src/components/AskModal.jsx
 import React, { useState } from 'react';
 import useAxios from '../api/useAxios';
-import axios from 'axios';
+import axios from '../api/axiosInstance';
 import dayjs from 'dayjs';
 
 export default function AskModal({ onClose }) {
@@ -43,17 +43,13 @@ export default function AskModal({ onClose }) {
     }
 
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/ask`,
-        {
-          lectureId: Number(lectureId),
-          askName,
-          askPhone,
-          askCard,
-          askMemo
-        },
-        { withCredentials: true }
-      );
+      await axios.post('/ask', {
+        lectureId: Number(lectureId),
+        askName,
+        askPhone,
+        askCard,
+        askMemo
+      });
       alert('상담 신청이 완료되었습니다.');
       onClose();
     } catch (err) {

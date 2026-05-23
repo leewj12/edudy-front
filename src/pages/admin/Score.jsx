@@ -87,12 +87,6 @@ export default function Score() {
     Promise.all(checkedScores.map((id) => axios.delete(`/admin/score/${id}`))).then(() => handleStudentClick(selectedStudent));
   };
 
-  const handleDownload = () => {
-    const headers = ['시험일', '구분', '시험과목', '점수', '비고'];
-    const rows = scores.map((s) => [s.lectureProjectDay, s.lectureProjectCategory, s.lectureProject, s.lectureProjectScore, s.lectureProjectComment]);
-    ExcelExportButton.downloadExcel('성적목록', headers, rows);
-  };
-
   const toggleCheck = (id) => {
     setCheckedScores((prev) => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
   };

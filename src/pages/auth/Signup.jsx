@@ -157,7 +157,6 @@ function Signup() {
 
       const { accessToken } = res.data;
       setAccessToken(accessToken); //전역 로그인 상태 설정
-      console.log(accessToken);
       toast.success('🎉 회원가입이 완료되었습니다!');
       navigate(PATH.Root);
 
