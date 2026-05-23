@@ -10,9 +10,10 @@ const AuthContext = createContext();
 // 컨텍스트 제공자 컴포넌트
 
 export const AuthProvider = ({ children }) => {
-  const [accessToken, setAccessTokenState] = useState(null); 
+  const [accessToken, setAccessTokenState] = useState(null);
   const [userRole, setUserRole] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const isLoggedIn = !!accessToken;
 
@@ -34,11 +35,12 @@ export const AuthProvider = ({ children }) => {
     const reissueIfTokenExists = async () => {
       try {
         const res = await axios.get("/reissue", { withCredentials: true });
-        //console.log("재발급 성공:", res.data);
         const newToken = res.data.accessToken;
-        setAccessToken(newToken); //갱신된 토큰 저장
+        setAccessToken(newToken);
       } catch (err) {
         setAccessToken(null);
+      } finally {
+        setIsAuthLoading(false);
       }
     };
 
@@ -47,8 +49,8 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-   <AuthContext.Provider value={{ accessToken, setAccessToken, isLoggedIn, userRole , userInfo  }}>
-      {children}
+   <AuthContext.Provider value={{ accessToken, setAccessToken, isLoggedIn, userRole, userInfo, isAuthLoading }}>
+      {isAuthLoading ? null : children}
     </AuthContext.Provider>
   );
 };
