@@ -111,9 +111,9 @@ function Login() {
           </button>
         </form>
 
-        <div className="text-center mt-4 text-sm text-gray-500">
+        {/* <div className="text-center mt-4 text-sm text-gray-500">
           <a href="#" className="hover:underline">비밀번호 찾기</a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

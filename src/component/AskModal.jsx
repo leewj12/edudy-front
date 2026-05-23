@@ -74,7 +74,7 @@ export default function AskModal({ onClose }) {
       <div className="bg-white p-8 rounded-lg w-full max-w-lg">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">신청문의</h2>
-          <button onClick={onClose} className="text-4xl">&times;</button>
+          <button onClick={onClose} className="text-4xl cursor-pointer">&times;</button>
         </div>
         <p className="text-sm text-gray-600 mb-4">
           궁금하신 사항을 보내주세요. 확인 후 빠른 시간 내에 상담을 도와드립니다.
@@ -101,7 +101,7 @@ export default function AskModal({ onClose }) {
             name="lectureId"
             value={form.lectureId}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border px-3 py-2 rounded cursor-pointer"
           >
             <option value="">관심 과정 선택*</option>
             {filteredLectures?.map(item => (
@@ -123,13 +123,13 @@ export default function AskModal({ onClose }) {
               name="askCard"
               checked={form.askCard}
               onChange={handleChange}
-              className="mr-2"
+              className="mr-2 cursor-pointer"
             />
             개인정보수집동의*
           </label>
           <button
             onClick={handleSubmit}
-            className="w-full bg-black text-white py-2 rounded"
+            className="w-full bg-black text-white py-2 rounded cursor-pointer"
           >
             상담신청
           </button>

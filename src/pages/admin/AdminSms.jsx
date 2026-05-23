@@ -131,18 +131,18 @@ const [modalMessage, setModalMessage] = useState('');
         <h1 className="text-2xl font-bold mb-6">문자 발송</h1>
 
         <div className="flex gap-4 mb-4 items-center text-sm">
-          <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="border px-3 py-1.5 rounded border-gray-400">
+          <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="border px-3 py-1.5 rounded border-gray-400 cursor-pointer">
             {courseList.map((c) => <option key={c.lectureId} value={c.lectureId}>{c.lectureTitle}</option>)}
           </select>
-          <select value={selectedRisk} onChange={(e) => setSelectedRisk(e.target.value)} className="border px-3 py-1.5 rounded border-gray-400">
+          <select value={selectedRisk} onChange={(e) => setSelectedRisk(e.target.value)} className="border px-3 py-1.5 rounded border-gray-400 cursor-pointer">
             <option value="">전체 위험도</option>
             <option value="정상">정상</option>
             <option value="주의">주의</option>
             <option value="경고">경고</option>
           </select>
           <input value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSearch()} className="border px-3 py-1.5 rounded border-gray-400 w-80" placeholder="이름 또는 전화번호 검색" />
-          <button onClick={handleSearch} className="bg-[#192a48] text-white px-4 py-1.5 rounded">조회</button>
-          <button onClick={() => setShowModal(true)} className="ml-auto border border-gray-400 px-3 py-1.5 rounded bg-white hover:bg-gray-100">공지 발송</button>
+          <button onClick={handleSearch} className="bg-[#192a48] text-white px-4 py-1.5 rounded cursor-pointer">조회</button>
+          <button onClick={() => setShowModal(true)} className="ml-auto border border-gray-400 px-3 py-1.5 rounded bg-white hover:bg-gray-100 cursor-pointer">공지 발송</button>
         </div>
 
         <table className="w-full border-t border-b border-gray-300 text-center text-sm">
@@ -169,7 +169,7 @@ const [modalMessage, setModalMessage] = useState('');
                   <td className="py-2 px-3">{item.birth}</td>
                   <td className="py-2 px-3">
                     {['주의', '경고'].includes(item.risk) ? (
-                      <button onClick={() => handleSendWarning(item.id)} className="text-sm border border-gray-400 hover:bg-gray-50 px-3 py-1 rounded">경고 발송</button>
+                      <button onClick={() => handleSendWarning(item.id)} className="text-sm border border-gray-400 hover:bg-gray-50 px-3 py-1 rounded cursor-pointer">경고 발송</button>
                     ) : '-'}
                   </td>
                 </tr>
@@ -180,7 +180,7 @@ const [modalMessage, setModalMessage] = useState('');
 
         <div className="mt-6 flex items-center justify-between relative">
           <div className="text-sm">
-            <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm">
+            <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm cursor-pointer">
               <option value={10}>10개씩</option>
               <option value={20}>20개씩</option>
               <option value={30}>30개씩</option>
@@ -193,7 +193,7 @@ const [modalMessage, setModalMessage] = useState('');
 
         {/* ✅ 내부 모달 컴포넌트 정의 */}
         {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
               <h2 className="text-lg font-semibold mb-4">전체 공지 문자</h2>
               <textarea
@@ -206,8 +206,8 @@ const [modalMessage, setModalMessage] = useState('');
               />
               <div className="text-sm text-right mt-1 text-gray-500">{modalMessage.length} / 70</div>
               <div className="flex justify-end gap-2 mt-4">
-                <button onClick={() => setShowModal(false)} className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 text-sm">취소</button>
-                <button onClick={() => handleNoticeSend(modalMessage)} className="px-3 py-1 rounded bg-[#192a48] text-white text-sm">발송</button>
+                <button onClick={() => setShowModal(false)} className="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200 text-sm cursor-pointer">취소</button>
+                <button onClick={() => handleNoticeSend(modalMessage)} className="px-3 py-1 rounded bg-[#192a48] text-white text-sm cursor-pointer">발송</button>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="text-lg mb-6">어딘가 길을 잃은 것 같다냥 ≽^•⩊•^≼</p>
       <img src={catGif} alt="404 고양이" className="w-120 max-w-full mb-6" />
       <button
-        onClick={() => navigate('#')}
+        onClick={() => navigate('/')}
         className="bg-[#966b2d] hover:bg-[#eeaa45] text-white font-semibold py-2 px-4 rounded shadow"
       >
         집으로 돌아가자냥

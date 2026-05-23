@@ -1,9 +1,8 @@
 import React from 'react'
 import AppRouter from './routes/AppRouter';
 import { AuthProvider } from './context/AuthContext';
-import { ToastContainer } from 'react-toastify'; // ✅ 추가
-import 'react-toastify/dist/ReactToastify.css'; // ✅ 스타일 import
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 
 function App() {

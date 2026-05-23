@@ -1,6 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { PATH } from './path';
+import PrivateRoute from '../routes/PrivateRoute';
+
 
 // import Test from '../pages/Test';
 // import Login from '../pages/auth/Login';
@@ -33,7 +35,6 @@ import { PATH } from './path';
 // import TrainDetail from '../pages/admin/TrainDetail';
 
 // lazy import for 코드 스플리팅 (용량 경량화를 위해서 사용)
-const Test = lazy(() => import('../pages/Test'));
 const Login = lazy(() => import('../pages/auth/Login'));
 const Signup = lazy(() => import('../pages/auth/Signup'));
 const Home = lazy(() => import('../pages/guest/Home'));
@@ -52,7 +53,7 @@ const LecturePartList = lazy(() => import('../pages/admin/LecturePartList'));
 const AttendanceStatus = lazy(() => import('../pages/admin/AttendanceStatus'));
 const AttendanceSetting = lazy(() => import('../pages/admin/AttendanceSetting'));
 const AdminMyPage = lazy(() => import('../pages/admin/AdminMyPage'));
-const GuestLectureList = lazy(() => import('../pages/guest/LectureList'));
+const GuestLectureList = lazy(() => import('../pages/guest/GuestLectureList'));
 const AttendScanner = lazy(() => import('../pages/user/qr/AttendScanner'));
 const QRAttendSuccess = lazy(() => import('../pages/QRAttendSuccess'));
 const AskList = lazy(() => import('../pages/admin/AskList'));
@@ -66,6 +67,12 @@ const AdminSms = lazy(() => import('../pages/admin/AdminSms'));
 const AdminNavigation = lazy(() => import('../pages/admin/AdminNavigation'));
 const AdminBanner = lazy(() => import('../pages/admin/AdminBanner'));
 const AdminNotice = lazy(()=>import('../pages/admin/AdminNotice'))
+const AdminConsult = lazy(()=>import('../pages/admin/AdminConsult'))
+const AdminSurvey = lazy(()=>import('../pages/admin/AdminSurvey'))
+const AdminSurveyList = lazy(()=>import('../pages/admin/AdminSurveyList'))
+const AdminLectureDetail = lazy(()=>import('../pages/admin/LectureDetail'))
+const TestQR = lazy(()=>import('../pages/user/qr/TestQR'))
+
 
 function AppRouter() {
   return (
@@ -73,7 +80,7 @@ function AppRouter() {
     <Suspense fallback={<div className="text-center mt-10">로딩 중...</div>}>
       <Routes>
         <Route path={PATH.NotFound} element={<NotFound />} />
-        <Route path={PATH.Test} element={<Test />} />
+        <Route path={PATH.None} element={<NotFound />} />
 
         {/* Guest */}
         <Route path={PATH.Root} element={<Home />} />
@@ -82,35 +89,41 @@ function AppRouter() {
         <Route path={PATH.Signup} element={<Signup />} />
         <Route path={PATH.LectureDetailPath} element={<LectureDetail />} />
         <Route path={PATH.GuestLectureList} element={<GuestLectureList />} />
+        <Route path={PATH.TestQR} element={<TestQR />} />
 
         {/* User */}
-        <Route path={PATH.Mypage} element={<Mypage />} />
-        <Route path={PATH.Score} element={<Score />} />
-        <Route path={PATH.Survey} element={<Survey />} />
-        <Route path={PATH.Info} element={<Info />} />
-        <Route path={PATH.AttendScanner} element={<AttendScanner />} />
-        <Route path={PATH.QRAttendSuccess} element={<QRAttendSuccess />} />
+        <Route path={PATH.Mypage} element={<PrivateRoute allowedRoles={["ROLE_USER","ROLE_INSTRUCTOR","ROLE_ADMIN"]}><Mypage /></PrivateRoute>} />
+        <Route path={PATH.Score} element={<PrivateRoute allowedRoles={["ROLE_USER","ROLE_INSTRUCTOR","ROLE_ADMIN"]}><Score /></PrivateRoute>} />
+        <Route path={PATH.Survey} element={<PrivateRoute allowedRoles={["ROLE_USER","ROLE_INSTRUCTOR","ROLE_ADMIN"]}><Survey /></PrivateRoute>} />
+        <Route path={PATH.Info} element={<PrivateRoute allowedRoles={["ROLE_USER","ROLE_INSTRUCTOR","ROLE_ADMIN"]}><Info /></PrivateRoute>} />
+        <Route path={PATH.AttendScanner} element={<PrivateRoute allowedRoles={["ROLE_USER","ROLE_INSTRUCTOR","ROLE_ADMIN"]}><AttendScanner /></PrivateRoute>} />
+        <Route path={PATH.QRAttendSuccess} element={<PrivateRoute allowedRoles={["ROLE_USER","ROLE_INSTRUCTOR","ROLE_ADMIN"]}><QRAttendSuccess /></PrivateRoute>} />
 
         {/* Admin */}
-        <Route path={PATH.AdminDashboard} element={<AdminDashboard />} />
-        <Route path={PATH.AdminNotice} element={<AdminNotice />} />
-        <Route path={PATH.AdminMyPage} element={<AdminMyPage />} />
-        <Route path={PATH.TrainList} element={<TrainList />} />
-        <Route path={PATH.TrainDetailPath} element={<TrainDetail />} />
-        <Route path={PATH.AttendanceStatus} element={<AttendanceStatus />} />
-        <Route path={PATH.AttendanceSetting} element={<AttendanceSetting />} />
-        <Route path={PATH.LecturePartList} element={<LecturePartList />} />
-        <Route path={PATH.LectureList} element={<LectureList />} />
-        <Route path={PATH.LectureEditPath} element={<LectureEdit />} />
-        <Route path={PATH.LectureForm} element={<LectureForm />} />
-        <Route path={PATH.UserList} element={<UserList />} />
-        <Route path={PATH.Category} element={<Category />} />
-        <Route path={PATH.AdminAsk} element={<AskList />} />
-        <Route path={PATH.AdminScore} element={<AdminScore />} />
-        <Route path={PATH.AdminInstr} element={<AdminInstr />} />
-        <Route path={PATH.AdminSms} element={<AdminSms />} />
-        <Route path={PATH.AdminNavigation} element={<AdminNavigation />} />
-        <Route path={PATH.AdminBanner} element={<AdminBanner />} />
+          <Route path={PATH.AdminDashboard} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><AdminDashboard /></PrivateRoute>} />
+
+          <Route path={PATH.AdminNotice} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminNotice /></PrivateRoute>} />
+          <Route path={PATH.AdminMyPage} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><AdminMyPage /></PrivateRoute>} />
+          <Route path={PATH.TrainList} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><TrainList /></PrivateRoute>} />
+          <Route path={PATH.TrainDetailPath} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><TrainDetail /></PrivateRoute>} />
+          <Route path={PATH.AttendanceStatus} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><AttendanceStatus /></PrivateRoute>} />
+          <Route path={PATH.AttendanceSetting} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><AttendanceSetting /></PrivateRoute>} />
+          <Route path={PATH.LecturePartList} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><LecturePartList /></PrivateRoute>} />
+          <Route path={PATH.LectureList} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><LectureList /></PrivateRoute>} />
+          <Route path={PATH.LectureEditPath} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><LectureEdit /></PrivateRoute>} />
+          <Route path={PATH.LectureForm} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><LectureForm /></PrivateRoute>} />
+          <Route path={PATH.UserList} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><UserList /></PrivateRoute>} />
+          <Route path={PATH.Category} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><Category /></PrivateRoute>} />
+          <Route path={PATH.AdminAsk} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AskList /></PrivateRoute>} />
+          <Route path={PATH.AdminScore} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><AdminScore /></PrivateRoute>} />
+          <Route path={PATH.AdminInstr} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminInstr /></PrivateRoute>} />
+          <Route path={PATH.AdminSms} element={<PrivateRoute allowedRoles={["ROLE_ADMIN","ROLE_INSTRUCTOR"]}><AdminSms /></PrivateRoute>} />
+          <Route path={PATH.AdminNavigation} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminNavigation /></PrivateRoute>} />
+          <Route path={PATH.AdminBanner} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminBanner /></PrivateRoute>} />
+          <Route path={PATH.AdminConsult} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminConsult /></PrivateRoute>} />
+          <Route path={PATH.AdminSurvey} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminSurvey /></PrivateRoute>} />
+          <Route path={PATH.AdminSurveyList} element={<PrivateRoute allowedRoles={["ROLE_ADMIN"]}><AdminSurveyList /></PrivateRoute>} />
+          <Route path={PATH.AdminLectureDetail} element={<PrivateRoute allowedRoles={["ROLE_ADMIN", "ROLE_INSTRUCTOR"]}><AdminLectureDetail /></PrivateRoute>} />
       </Routes>
     </Suspense>
   </BrowserRouter>

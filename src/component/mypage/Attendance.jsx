@@ -75,7 +75,7 @@ export default function Attendance() {
         } finally {
           setShowQR(false);
         }
-      }, 5000);
+      }, 7000);
     };
   
     useEffect(() => {

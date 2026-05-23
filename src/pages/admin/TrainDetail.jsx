@@ -6,7 +6,7 @@ import PageMeta from '../../components/PageMeta';
 import TrainModal from '../../components/admintrain/TrainModal';
 import axios from '../../api/axiosInstance';
 import dayjs from 'dayjs';
-import { useAuth } from '../../context/AuthContext'; // ← 추가
+import { useAuth } from '../../context/AuthContext'; 
 
 
 export default function TrainDetail() {

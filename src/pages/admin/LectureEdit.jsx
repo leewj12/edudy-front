@@ -24,7 +24,11 @@ export default function LectureEdit() {
     lectureStartTime: '',
     lectureEndTime: '',
     lectureDescription: '',
-    lectureCurriculum: [''],
+    subjects: [{ subjectId: null, subjectTitle: '' }],
+    lectureWarn: 0,
+    lectureDanger: 0,
+    lecturePriority: 0,
+    lectureStatus: true,
   });
   const [LectureThumbnail, setLectureThumbnail] = useState(null);
   const [LectureContentImage, setLectureContentImage] = useState(null);
@@ -34,21 +38,28 @@ export default function LectureEdit() {
       try {
         const [categoryRes, lectureRes] = await Promise.all([
           axios.get('/admin/category/list'),
-          axios.get(`/admin/lecture/${lectureId}`)
+          axios.get(`/admin/lecture/${lectureId}`),
         ]);
         setCategoryList(categoryRes.data);
-        setForm({
+  
+        // 기존 form은 유지하고 과목만 subjectTitles로 대체
+        setForm((prev) => ({
+          ...prev,
           ...lectureRes.data,
           lectureCategory: lectureRes.data.lectureCategoryId,
-          lectureCurriculum: lectureRes.data.lectureCurriculum || ['']
-        });
+          subjects: lectureRes.data.subjects || [{ subjectId: null, subjectTitle: '' }],
+          lectureWarn: lectureRes.data.lectureWarn ?? 0,
+          lectureDanger: lectureRes.data.lectureDanger ?? 0,
+          lecturePriority: lectureRes.data.lecturePriority ?? 0,
+          lectureStatus: lectureRes.data.lectureStatus ?? true,
+        }));
       } catch (err) {
-        console.error("데이터 불러오기 실패", err);
-        alert("수정할 데이터를 불러오지 못했습니다.");
+        console.error('데이터 불러오기 실패', err);
+        alert('수정할 데이터를 불러오지 못했습니다.');
         navigate('/admin/lecture/list');
       }
     };
-
+  
     fetchData();
   }, [lectureId, navigate]);
 
@@ -68,10 +79,20 @@ export default function LectureEdit() {
     }).open();
   };
 
-  const handleCurriculumChange = (index, value) => {
-    const updated = [...form.lectureCurriculum];
-    updated[index] = value;
-    setForm({ ...form, lectureCurriculum: updated });
+  const handleSubjectChange = (index, value) => {
+    const updated = [...form.subjects];
+    updated[index].subjectTitle = value;
+    setForm({ ...form, subjects: updated });
+  };
+
+  const addSubject = () => {
+    setForm({ ...form, subjects: [...form.subjects, { subjectId: null, subjectTitle: '' }] });
+  };
+
+  const removeSubject = (index) => {
+    const updated = [...form.subjects];
+    updated.splice(index, 1);
+    setForm({ ...form, subjects: updated });
   };
 
   const handleSubmit = async (e) => {
@@ -82,20 +103,33 @@ export default function LectureEdit() {
       return;
     }
 
+    const requestBody = {
+      lectureTitle: form.lectureTitle,
+      lectureShortTitle: form.lectureShortTitle,
+      lectureDescription: form.lectureDescription,
+      lecturePrice: 0,
+      lectureCapacity: Number(form.lectureCapacity),
+      lecturePostcode: form.lecturePostcode,
+      lectureAddress: form.lectureAddress,
+      lectureAddressDetail: form.lectureAddressDetail,
+      lectureStart: form.lectureStart,
+      lectureEnd: form.lectureEnd,
+      lectureStartTime: form.lectureStartTime.length === 5 ? `${form.lectureStartTime}:00` : form.lectureStartTime,
+      lectureEndTime: form.lectureEndTime.length === 5 ? `${form.lectureEndTime}:00` : form.lectureEndTime,
+      lectureLayoutStart: `${form.lectureStart}T${form.lectureStartTime.length === 5 ? `${form.lectureStartTime}:00` : form.lectureStartTime}`,
+      lectureLayoutEnd: `${form.lectureEnd}T${form.lectureEndTime.length === 5 ? `${form.lectureEndTime}:00` : form.lectureEndTime}`,
+      lectureCategoryId: Number(form.lectureCategory),
+      subjects: form.subjects.filter(s => s.subjectTitle.trim() !== ''),
+      lectureWarn: form.lectureWarn,
+      lectureDanger: form.lectureDanger,
+      lecturePriority: form.lecturePriority,
+      lectureStatus: form.lectureStatus,
+    };
+
     const formData = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-      if (key === 'lectureCategory') {
-        formData.append('lectureCategoryId', value);
-        return;
-      }
-      if (Array.isArray(value)) {
-        value.forEach((v) => formData.append(`${key}[]`, v));
-      } else {
-        formData.append(key, value);
-      }
-    });
-    if (LectureThumbnail) formData.append('LectureThumbnail', LectureThumbnail);
-    if (LectureContentImage) formData.append('LectureContentImage', LectureContentImage);
+    formData.append('request', new Blob([JSON.stringify(requestBody)], { type: 'application/json' }));
+    if (LectureThumbnail) formData.append('thumbnailFile', LectureThumbnail);
+    if (LectureContentImage) formData.append('contentImageFile', LectureContentImage);
 
     try {
       await axios.put(`/admin/lecture/${lectureId}`, formData, {
@@ -115,6 +149,7 @@ export default function LectureEdit() {
       <main className="flex-1 overflow-y-auto bg-white p-6">
         <PageMeta title="과정 수정" description="과정을 수정할 수 있습니다." />
         <Header />
+
         <section className="bg-white p-6 rounded-lg min-w-[1200px]">
           <h1 className="text-2xl font-bold mb-6">과정 수정</h1>
 
@@ -122,41 +157,75 @@ export default function LectureEdit() {
             <table className="w-full border border-gray-300 text-sm">
               <tbody>
                 <tr>
-                  <td className="w-40 font-medium border px-3 py-2">카테고리</td>
-                  <td className="border px-3 py-2" colSpan={3}>
-                    <select name="lectureCategory" value={form.lectureCategory} onChange={handleChange} required
-                      className="w-full border border-gray-300 rounded px-3 py-2">
+                  <td className="w-40 font-medium border border-gray-300 px-3 py-2">카테고리</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <select name="lectureCategory" value={form.lectureCategory} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required>
                       <option value="">선택하세요</option>
                       {categoryList.map((cat) => (
-                        <option key={cat.lectureCategoryId} value={cat.lectureCategoryId}>
-                          {cat.lectureCategoryName}
-                        </option>
+                        <option key={cat.lectureCategoryId} value={cat.lectureCategoryId}>{cat.lectureCategoryName}</option>
                       ))}
                     </select>
                   </td>
-                </tr>
-
-                <tr>
-                  <td className="font-medium border px-3 py-2">과정명</td>
-                  <td className="border px-3 py-2">
-                    <input type="text" name="lectureTitle" value={form.lectureTitle} onChange={handleChange} required
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                  <td className="font-medium border px-3 py-2">요약명</td>
-                  <td className="border px-3 py-2">
-                    <input type="text" name="lectureShortTitle" value={form.lectureShortTitle} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
+                  <td className="w-40 font-medium border border-gray-300 px-3 py-2">과정명</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="text" name="lectureTitle" value={form.lectureTitle} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border px-3 py-2">우편번호</td>
-                  <td className="border px-3 py-2" colSpan={3}>
-                    <div className="relative">
-                      <input type="text" name="lecturePostcode" value={form.lecturePostcode} readOnly
-                        className="w-full border border-gray-300 rounded px-3 py-2 pr-[100px]" />
-                      <button type="button" onClick={handlePostcode}
-                        className="absolute top-0 right-0 h-full bg-gray-500 text-white px-4 text-sm rounded-r hover:bg-gray-600">
+                  <td className="font-medium border border-gray-300 px-3 py-2">요약명</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="text" name="lectureShortTitle" value={form.lectureShortTitle || ''} onChange={(e) => {
+                      if (e.target.value.length <= 8) {
+                        setForm({ ...form, lectureShortTitle: e.target.value });
+                      }
+                    }} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                  <td className="font-medium border border-gray-300 px-3 py-2">최대 인원</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="number" name="lectureCapacity" value={form.lectureCapacity} onChange={handleChange} min="1" className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2">과정 내용 이미지</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="file" accept="image/*" onChange={(e) => setLectureContentImage(e.target.files[0])} className="w-full border border-gray-300 rounded px-3 py-2" />
+                  </td>
+                  <td className="font-medium border border-gray-300 px-3 py-2">썸네일 이미지</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="file" accept="image/*" onChange={(e) => setLectureThumbnail(e.target.files[0])} className="w-full border border-gray-300 rounded px-3 py-2" />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2">시작 시간</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="time" name="lectureStartTime" value={form.lectureStartTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                  <td className="font-medium border border-gray-300 px-3 py-2">종료 시간</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="time" name="lectureEndTime" value={form.lectureEndTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2">시작일</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="date" name="lectureStart" value={form.lectureStart} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                  <td className="font-medium border border-gray-300 px-3 py-2">종료일</td>
+                  <td className="border border-gray-300 px-3 py-2">
+                    <input type="date" name="lectureEnd" value={form.lectureEnd} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2">우편번호</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <div className="relative w-full">
+                      <input type="text" name="lecturePostcode" value={form.lecturePostcode} readOnly className="w-full border border-gray-300 rounded px-3 py-2 pr-[100px]" required />
+                      <button type="button" onClick={handlePostcode} className="absolute top-0 right-0 h-full bg-gray-500 text-white px-4 text-sm rounded-r hover:bg-gray-600">
                         주소 찾기
                       </button>
                     </div>
@@ -164,79 +233,49 @@ export default function LectureEdit() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border px-3 py-2">주소</td>
-                  <td className="border px-3 py-2" colSpan={3}>
-                    <input type="text" name="lectureAddress" value={form.lectureAddress} readOnly
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
+                  <td className="font-medium border border-gray-300 px-3 py-2">주소</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <input type="text" name="lectureAddress" value={form.lectureAddress} readOnly className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border px-3 py-2">상세 주소</td>
-                  <td className="border px-3 py-2" colSpan={3}>
-                    <input type="text" name="lectureAddressDetail" value={form.lectureAddressDetail} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
+                  <td className="font-medium border border-gray-300 px-3 py-2">상세 주소</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <input type="text" name="lectureAddressDetail" value={form.lectureAddressDetail} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border px-3 py-2">정원</td>
-                  <td className="border px-3 py-2">
-                    <input type="number" name="lectureCapacity" value={form.lectureCapacity} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                  <td className="font-medium border px-3 py-2">설명</td>
-                  <td className="border px-3 py-2">
-                    <input type="text" name="lectureDescription" value={form.lectureDescription} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
+                  <td className="font-medium border border-gray-300 px-3 py-2">과정 설명</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <input type="text" name="lectureDescription" value={form.lectureDescription} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border px-3 py-2">시작일</td>
-                  <td className="border px-3 py-2">
-                    <input type="date" name="lectureStart" value={form.lectureStart} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                  <td className="font-medium border px-3 py-2">종료일</td>
-                  <td className="border px-3 py-2">
-                    <input type="date" name="lectureEnd" value={form.lectureEnd} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="font-medium border px-3 py-2">시작시간</td>
-                  <td className="border px-3 py-2">
-                    <input type="time" name="lectureStartTime" value={form.lectureStartTime} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                  <td className="font-medium border px-3 py-2">종료시간</td>
-                  <td className="border px-3 py-2">
-                    <input type="time" name="lectureEndTime" value={form.lectureEndTime} onChange={handleChange}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="font-medium border px-3 py-2 align-top">과목</td>
-                  <td className="border px-3 py-2" colSpan={3}>
-                    {form.lectureCurriculum.map((curr, idx) => (
+                  <td className="font-medium border border-gray-300 px-3 py-2 align-top">과목</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    {form.subjects.map((curr, idx) => (
                       <div key={idx} className="flex items-center gap-2 mb-2">
                         <input
                           type="text"
-                          value={curr}
-                          onChange={(e) => handleCurriculumChange(idx, e.target.value)}
+                          value={curr.subjectTitle}
+                          onChange={(e) => {
+                            const updated = [...form.subjects];
+                            updated[idx].subjectTitle = e.target.value;
+                            setForm({ ...form, subjects: updated });
+                          }}
                           className="w-full border border-gray-300 rounded px-3 py-2"
                           placeholder={`과목 ${idx + 1}`}
                           required
                         />
-                        {form.lectureCurriculum.length > 1 && (
+                        {form.subjects.length > 1 && (
                           <button
                             type="button"
                             onClick={() => {
-                              const updated = form.lectureCurriculum.filter((_, i) => i !== idx);
-                              setForm({ ...form, lectureCurriculum: updated });
+                              const updated = form.subjects.filter((_, i) => i !== idx);
+                              setForm({ ...form, subjects: updated });
                             }}
                             className="text-red-500 text-sm border border-red-400 px-2 py-1 rounded hover:bg-red-100 min-w-13"
                           >
@@ -247,21 +286,29 @@ export default function LectureEdit() {
                     ))}
                     <button
                       type="button"
-                      onClick={() => setForm({ ...form, lectureCurriculum: [...form.lectureCurriculum, ''] })}
+                      onClick={() =>
+                        setForm({
+                          ...form,
+                          subjects: [...form.subjects, { subjectId: null, subjectTitle: '' }],
+                        })
+                      }
                       className="mt-2 text-blue-600 underline text-sm"
                     >
                       + 과목 추가
                     </button>
                   </td>
                 </tr>
+
               </tbody>
             </table>
 
             <div className="pt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => navigate('/admin/lecture/list')}
-                className="px-4 py-2 border border-gray-400 rounded">취소</button>
-              <button type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">수정</button>
+              <button type="button" onClick={() => navigate('/admin/lecture/list')} className="px-4 py-2 border border-gray-400 rounded">
+                취소
+              </button>
+              <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
+                수정
+              </button>
             </div>
           </form>
         </section>

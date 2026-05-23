@@ -68,9 +68,9 @@ export default function ExcelExportButton({ data, filename = 'data', columns = n
   return (
     <button
       onClick={handleDownload}
-      className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm"
+      className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer"
     >
-      엑셀 다운로드
+      Excel 다운로드
     </button>
   );
 }

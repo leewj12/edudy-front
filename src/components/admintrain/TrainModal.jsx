@@ -131,15 +131,16 @@ export default function TrainModal({
               <td className="border border-b-0 border-gray-400 w-[150px] px-2 py-1">
                 <div className="flex items-center h-10">
                   {instructorSignUrl && (
-                    <img src={instructorSignUrl} alt="강사 서명" className="h-8 object-contain mx-auto" />
+                    <img src={instructorSignUrl || '/default-sign.png'} alt="강사 서명" className="h-8 object-contain mx-auto" />
                   )}
                 </div>
               </td>
               <td className="border border-b-0 border-gray-400 bg-[#FAFAFA] w-[130px] text-center px-2 py-1">책임자 서명</td>
               <td className="border-b-0 border-gray-400 w-[150px] px-2 py-1">
-                {managerSignUrl && (
-                  <img src={managerSignUrl} alt="책임자 서명" className="h-8 object-contain mx-auto" />
-                )}
+                {/* {managerSignUrl && (
+                  <img src={managerSignUrl || '/managersign.png'} alt="책임자 서명" className="h-8 object-contain mx-auto" />
+                )} */}
+                <img src={'/images/managersign.png'} alt="책임자 서명" className="h-8 object-contain mx-auto" />
               </td>
             </tr>
           </tbody>

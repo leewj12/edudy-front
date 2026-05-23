@@ -112,13 +112,11 @@ function Login() {
           </button>
         </form>
 
-        <div className="text-center text-sm text-gray-500 mt-6">SNS 간편 로그인</div>
+        {/* <div className="text-center text-sm text-gray-500 mt-6">SNS 간편 로그인</div>
         <div className="flex justify-center space-x-4 mt-2">
-          {/* 구글 */}
           <a href="#" className="w-10 h-10 rounded-full bg-[#EA4335] flex items-center justify-center text-white text-xl">
             G
           </a>
-          {/* 카카오 */}
           <a href="#" className="w-10 h-10 rounded-full bg-[#FAE100] flex items-center justify-center text-[#371D1E] font-bold text-sm">
             talk
           </a>
@@ -126,7 +124,7 @@ function Login() {
 
         <div className="text-center mt-4 text-sm text-gray-500">
           <a href="#" className="hover:underline">비밀번호 찾기</a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

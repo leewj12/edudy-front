@@ -171,8 +171,8 @@ export default function Score() {
             <div className="flex justify-between mb-4">
               <h2 className="text-xl font-semibold">[{selectedStudent.userName}] 성적 관리</h2>
               <div className="space-x-2">
-                <button onClick={() => setIsModalOpen(true)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">+ 추가</button>
-                <button onClick={handleDelete} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">삭제</button>
+                <button onClick={() => setIsModalOpen(true)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">+ 추가</button>
+                <button onClick={handleDelete} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">삭제</button>
                 {/* <button onClick={handleDownload} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">엑셀 다운로드</button> */}
                 
 
@@ -188,7 +188,7 @@ export default function Score() {
                   ]}
                 />
 
-                <button onClick={() => window.print()} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">프린트</button>
+                <button onClick={() => window.print()} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">프린트</button>
               </div>
             </div>
 
@@ -242,7 +242,7 @@ export default function Score() {
                                 });
                                 setIsModalOpen(true);
                               }}
-                              className="text-blue-600 hover:underline"
+                              className="text-blue-600 hover:underline cursor-pointer"
                             >수정</button>
                           </td>
                         </tr>
@@ -270,7 +270,7 @@ export default function Score() {
             )}
 
             <div className="flex justify-center mt-6">
-              <button onClick={() => setStep(2)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">수강생 목록으로</button>
+              <button onClick={() => setStep(2)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">수강생 목록으로</button>
             </div>
           </div>
         )}

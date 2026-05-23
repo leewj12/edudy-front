@@ -1,9 +1,9 @@
 // 라우트 경로 정의
 export const PATH = {
-    Test: '/test',
     Root: '/', 
 
     NotFound: "/notfound",
+    None:"*",
     // guest
     AdminLogin: '/adminLogin',
     Login: '/login',
@@ -11,6 +11,7 @@ export const PATH = {
     LectureDetail: (id) => `/lecture/${id}`, // 함수
     LectureDetailPath: '/lecture/:lectureId', // 라우터에 쓸 path 문자열은 따로
     GuestLectureList: '/lectureList',
+    TestQR: '/test-qr',
 
     // user
     Mypage: '/user/mypage', 
@@ -42,4 +43,9 @@ export const PATH = {
     AdminNavigation: '/admin/navigation',
     AdminBanner: '/admin/banner',
     AdminNotice: '/admin/notice/list',
+    AdminConsult: '/admin/consult',
+    AdminSurvey: '/admin/survey',
+    AdminSurveyList: '/admin/survey/list',
+    AdminLectureD: (id) => `/admin/lecture/${id}`,
+    AdminLectureDetail: '/admin/lecture/:lectureId',
   };

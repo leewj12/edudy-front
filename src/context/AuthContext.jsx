@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     const reissueIfTokenExists = async () => {
       try {
         const res = await axios.get("/reissue", { withCredentials: true });
-        console.log("재발급 성공:", res.data);
+        //console.log("재발급 성공:", res.data);
         const newToken = res.data.accessToken;
         setAccessToken(newToken); //갱신된 토큰 저장
       } catch (err) {

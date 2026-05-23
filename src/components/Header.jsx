@@ -9,7 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 export default function Header() {
   const { accessToken, setAccessToken, userInfo  } = useAuth();
   const navigate = useNavigate();
-  console.log("디코딩된 userInfo:", userInfo); // ✅ 여기 추가
+  //console.log("디코딩된 userInfo:", userInfo); // ✅ 여기 추가
   const signUrl = userInfo?.sign || ''; 
   const roleMap = {
     ROLE_ADMIN: "관리자",
@@ -24,7 +24,7 @@ export default function Header() {
   try {
     if (accessToken) {
       const decoded = jwtDecode(accessToken);
-      console.log(decoded);
+      //console.log(decoded);
       userName = decoded.name || decoded.userName || '';
       userRole = decoded.role || decoded.userRole || ''; // ROLE_ADMIN → ADMIN
     }
@@ -72,7 +72,7 @@ export default function Header() {
           </div>
 
           <button
-            className="bg-gray-100 hover:bg-gray-200 text-xs text-gray-700 px-3 py-1 rounded border border-gray-300"
+            className="bg-gray-100 hover:bg-gray-200 text-xs text-gray-700 px-3 py-1 rounded border border-gray-300 cursor-pointer"
             onClick={handleLogout}
           >
             로그아웃

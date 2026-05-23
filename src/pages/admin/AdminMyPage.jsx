@@ -26,6 +26,21 @@ export default function AdminMyPage() {
   } catch (e) {
     console.warn('토큰 디코딩 실패:', e);
   }
+  const handleSignatureChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSignature(file);
+    }
+  };
+
+  const handleSignatureSubmit = () => {
+    if (signature) {
+      alert('서명이 등록되었습니다.');
+      // 실제 서버 업로드 로직은 여기에 추가 예정
+    } else {
+      alert('서명을 먼저 선택해주세요.');
+    }
+  };
 
   return (
     <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
@@ -73,10 +88,11 @@ export default function AdminMyPage() {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => setSignature(e.target.files[0])}
+                    onChange={handleSignatureChange}
                     className="border border-gray-300 rounded px-3 py-1"
                   />
-                  <button className="text-xs border px-2 py-1 rounded hover:bg-gray-100">서명 등록/수정</button>
+                  <button className="text-xs border px-2 py-1 rounded hover:bg-gray-100"
+                  onClick={handleSignatureSubmit}>서명 등록/수정</button>
                 </div>
               </div>
             </div>

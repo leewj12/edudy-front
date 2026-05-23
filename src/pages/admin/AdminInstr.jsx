@@ -1,323 +1,4 @@
-// // ✅ AdminInstr.js 전체 리팩토링된 버전
-// import React, { useEffect, useState } from 'react';
-// import Sidebar from '../../components/Sidebar';
-// import Header from '../../components/Header';
-// import PageMeta from '../../components/PageMeta';
-// import Pagination from '../../components/Pagination';
-// import ExcelExportButton from '../../component/admin/ExcelExportButton';
-// import axios from '../../api/axiosInstance';
-// import dayjs from 'dayjs';
-// import styles from '../../css/PrintOnly.module.css';
-
-// export default function AdminInstr() {
-
-//   const [courses, setCourses] = useState([]);
-//   const [selectedCourse, setSelectedCourse] = useState('');
-//   const [originalData, setOriginalData] = useState([]);
-//   const [filtered, setFiltered] = useState([]);
-//   const [search, setSearch] = useState('');
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const [itemsPerPage, setItemsPerPage] = useState(10);
-//   const [selectedIds, setSelectedIds] = useState([]);
-//   const [error, setError] = useState('');
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [instructors, setInstructors] = useState([]);
-//   const [selectedToRegister, setSelectedToRegister] = useState([]);
-
-//   const fetchCoursesAndInstructors = async () => {
-//     try {
-//       const courseRes = await axios.get('/admin/lecture/list');
-//       console.log('✅ 과정 목록:', courseRes.data);
-//       const now = dayjs();
-//       const ongoing = courseRes.data.filter(course =>
-//         // dayjs(course.lectureStart).isBefore(now) && 
-//         dayjs(course.lectureEnd).isAfter(now)
-//       );
-//       if (ongoing.length === 0) {
-//         setError('현재 진행 중인 과정이 없습니다.');
-//         return;
-//       }
-//       setCourses(ongoing);
-//       setSelectedCourse(ongoing[0].lectureId);
-//     } catch (err) {
-//       console.error('❌ 과정 목록 로딩 실패:', err);
-//       setError('진행 중인 과정 정보를 불러오지 못했습니다.');
-//     }
-//   };
-
-//   const fetchInstructors = async (lectureId) => {
-//     try {
-//       const res = await axios.get(`/admin/staff/lecture/${lectureId}`);
-//       console.log('✅ 현재 과정 강사 목록:', res.data);
-//       const valid = res.data.map(item => ({
-//         id: item.lectureStaffId,
-//         userId: item.userId, // ✅ 추가
-//         name: item.userName,
-//         email: item.userEmail,
-//         phone: item.userPhone,
-//         birth: item.userBirth ? dayjs(item.userBirth).format('YYMMDD') : '',
-//         lectureId: lectureId
-//       }));
-//       setOriginalData(valid);
-//       setFiltered(valid);
-//     } catch (err) {
-//       console.error('❌ 강사 정보 로딩 실패:', err);
-//       setOriginalData([]);
-//       setFiltered([]);
-//     }
-//   };
-
-//   useEffect(() => { fetchCoursesAndInstructors(); }, []);
-//   useEffect(() => { if (selectedCourse) fetchInstructors(selectedCourse); }, [selectedCourse]);
-//   useEffect(() => {
-//     const totalPages = Math.ceil(filtered.length / itemsPerPage);
-//     if (currentPage > totalPages) setCurrentPage(1);
-//   }, [itemsPerPage, filtered]);
-
-//   const handleSearch = () => {
-//     const result = originalData.filter(item =>
-//       (!search || item.name.includes(search) || item.email.includes(search))
-//     );
-//     setFiltered(result);
-//     setCurrentPage(1);
-//   };
-
-//   const handleRemove = async () => {
-//     if (selectedIds.length === 0) return alert('해지할 강사를 선택하세요.');
-//     if (!window.confirm('선택한 담당자를 해지하시겠습니까?')) return;
-//     try {
-//       for (const id of selectedIds) await axios.delete(`/admin/staff/${id}`);
-//       await fetchInstructors(selectedCourse);
-//       setSelectedIds([]);
-//     } catch (err) {
-//       console.error('❌ 해지 실패:', err);
-//       alert('해지 중 오류 발생');
-//     }
-//   };
-
-//   const handleOpenModal = async () => {
-//     try {
-//       const res = await axios.get('/admin/instructor/list');
-//       console.log('✅ 전체 강사 목록:', res.data);
-//       const registeredIds = originalData.map(d => d.userId);
-//       const filtered = res.data.filter(i => !registeredIds.includes(i.userId));
-//       console.log('✅ 미등록 강사 목록:', filtered);
-//       setInstructors(filtered);
-//       setSelectedToRegister([]);
-//       setIsModalOpen(true);
-//     } catch (err) {
-//       console.error('강사 목록 불러오기 실패:', err);
-//       alert('강사 목록을 불러오지 못했습니다.');
-//     }
-//   };
-
-//   const handleRegisterStaff = async () => {
-//     if (selectedToRegister.length === 0) return alert('등록할 강사를 선택하세요.');
-//     try {
-//       for (const userId of selectedToRegister) {
-//         await axios.post('/admin/staff', { userId, lectureId: selectedCourse });
-//       }
-//       await fetchInstructors(selectedCourse);
-//       setIsModalOpen(false);
-//       alert('강사가 성공적으로 등록되었습니다.');
-//     } catch (err) {
-//       console.error('등록 실패:', err);
-//       alert('등록 중 오류 발생');
-//     }
-//   };
-
-//   const toggleRegisterSelect = (userId) => {
-//     setSelectedToRegister(prev =>
-//       prev.includes(userId) ? prev.filter(id => id !== userId) : [...prev, userId]
-//     );
-//   };
-
-//   const toggleSelectAll = (checked) => {
-//     if (checked) {
-//       const allIds = instructors.map(i => i.userId);
-//       setSelectedToRegister(allIds);
-//     } else {
-//       setSelectedToRegister([]);
-//     }
-//   };
-
-//   const handleCheck = (id) => {
-//     setSelectedIds(prev => prev.includes(id) ? prev.filter(v => v !== id) : [...prev, id]);
-//   };
-
-//   const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-//   const totalPages = Math.ceil(filtered.length / itemsPerPage);
-
-//   return (
-//     <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-//       <Sidebar />
-//       <main className="flex-1 overflow-y-auto bg-white p-6 print:block">
-//         <PageMeta title="담당자 관리" description="과정을 담당할 강사를 배정합니다" />
-//         <Header />
-//         <h1 className="text-2xl font-bold mb-6">담당자 관리</h1>
-
-//         <div className={`flex gap-4 mb-4 items-center no-print text-sm ${styles['no-print']}`}>
-//           <select
-//             value={selectedCourse}
-//             onChange={(e) => setSelectedCourse(e.target.value)}
-//             className="border border-gray-400 px-3 py-1.5 rounded"
-//           >
-//             {courses.map(course => (
-//               <option key={course.lectureId} value={course.lectureId}>{course.lectureTitle}</option>
-//             ))}
-//           </select>
-//           <input
-//             type="text"
-//             value={search}
-//             onChange={(e) => setSearch(e.target.value)}
-//             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-//             placeholder="이름 또는 이메일로 검색해주세요"
-//             className="border border-gray-400 px-3 py-1.5 rounded w-80"
-//           />
-//           <button onClick={handleSearch} className="bg-[#192a48] text-white px-4 py-1.5 rounded cursor-pointer">
-//             조회
-//           </button>
-//         </div>
-
-//         {error ? (
-//           <div className="text-center text-red-500 font-semibold mt-10">{error}</div>
-//         ) : (
-//           <>
-//             <div className={`flex justify-end mb-2 ${styles['no-print']}`}>
-//               <div className="flex gap-2">
-//                 <button onClick={handleOpenModal} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm">등록</button>
-//                 <button onClick={handleRemove} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm">해지</button>
-//                 <ExcelExportButton
-//                   data={filtered}
-//                   filename="담당자_리스트"
-//                   columns={[
-//                     { key: 'name', label: '이름' },
-//                     { key: 'email', label: '이메일' },
-//                     { key: 'phone', label: '전화번호' },
-//                     { key: 'birth', label: '생년월일' },
-//                   ]}
-//                 />
-//                 <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm">프린트</button>
-//               </div>
-//             </div>
-
-//             <div id="print-area">
-//               <table className="w-full border-t border-b border-gray-300 text-center text-sm">
-//                 <thead className="bg-[#FAFAFA]">
-//                   <tr>
-//                     <th className="py-2 px-3">
-//                       <input
-//                         type="checkbox"
-//                         onChange={(e) => setSelectedIds(e.target.checked ? paginated.map(i => i.id) : [])}
-//                         checked={paginated.length > 0 && paginated.every(i => selectedIds.includes(i.id))}
-//                         className={styles['no-print']}
-//                       />
-//                     </th>
-//                     <th className="py-2 px-3">이름</th>
-//                     <th className="py-2 px-3">이메일</th>
-//                     <th className="py-2 px-3">전화번호</th>
-//                     <th className="py-2 px-3">생년월일</th>
-//                   </tr>
-//                 </thead>
-//                 <tbody>
-//                   {paginated.length === 0 ? (
-//                     <tr>
-//                       <td colSpan={6} className="text-center py-6 text-gray-400">조건에 맞는 담당자가 없습니다.</td>
-//                     </tr>
-//                   ) : (
-//                     paginated.map(item => (
-//                       <tr key={item.id} className="border-t border-gray-200">
-//                         <td className="py-2 px-3">
-//                           <input
-//                             type="checkbox"
-//                             checked={selectedIds.includes(item.id)}
-//                             onChange={() => handleCheck(item.id)}
-//                             className={styles['no-print']}
-//                           />
-//                         </td>
-//                         <td className="py-2 px-3">{item.name}</td>
-//                         <td className="py-2 px-3">{item.email}</td>
-//                         <td className="py-2 px-3">{item.phone}</td>
-//                         <td className="py-2 px-3">{item.birth}</td>
-//                       </tr>
-//                     ))
-//                   )}
-//                 </tbody>
-//               </table>
-//             </div>
-
-//             <div className={`mt-6 flex items-center justify-between relative ${styles['no-print']}`}>
-//               <div className="text-sm">
-//                 <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm">
-//                   <option value={10}>10개씩</option>
-//                   <option value={20}>20개씩</option>
-//                   <option value={30}>30개씩</option>
-//                 </select>
-//               </div>
-//               <div className="absolute left-1/2 transform -translate-x-1/2">
-//                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={(page) => setCurrentPage(page)} />
-//               </div>
-//             </div>
-//           </>
-//         )}
-
-//         {isModalOpen && (
-//           <div className={`fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center ${styles['no-print']}`}>
-          
-//             <div className="bg-white rounded-lg w-[600px] p-6 shadow-lg relative">
-//               <button
-//                 className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl"
-//                 onClick={() => setIsModalOpen(false)}
-//               >
-//                 &times;
-//               </button>
-//               <h2 className="text-lg font-semibold mb-4">강사 등록</h2>
-//               <div className="max-h-80 overflow-y-auto border-t border-b border-gray-300">
-//                 <table className="w-full text-sm text-center">
-//                   <thead className="bg-gray-100">
-//                     <tr>
-//                       <th className="py-2">
-//                         <input
-//                           type="checkbox"
-//                           onChange={(e) => toggleSelectAll(e.target.checked)}
-//                           checked={instructors.length > 0 && instructors.every(i => selectedToRegister.includes(i.userId))}
-//                         />
-//                       </th>
-//                       <th className="py-2">이름</th>
-//                       <th className="py-2">강사 ID</th>
-//                     </tr>
-//                   </thead>
-//                   <tbody>
-//                     {instructors.length === 0 ? (
-//                       <tr><td colSpan={3} className="py-6 text-gray-400">등록 가능한 강사가 없습니다.</td></tr>
-//                     ) : (
-//                       instructors.map(ins => (
-//                         <tr key={ins.userId} className="border-t">
-//                           <td className="py-2">
-//                             <input type="checkbox" checked={selectedToRegister.includes(ins.userId)} onChange={() => toggleRegisterSelect(ins.userId)} />
-//                           </td>
-//                           <td className="py-2">{ins.usersName}</td>
-//                           <td className="py-2">{ins.userId}</td>
-//                         </tr>
-//                       ))
-//                     )}
-//                   </tbody>
-//                 </table>
-//               </div>
-//               <div className="mt-4 text-center flex justify-center gap-3">
-//                 <button onClick={handleRegisterStaff} className="bg-blue-600 text-white px-4 py-2 rounded">등록</button>
-//                 <button onClick={() => setIsModalOpen(false)} className="bg-gray-300 text-black px-4 py-2 rounded">취소</button>
-//               </div>
-//             </div>
-          
-//           </div>
-//         )}
-//       </main>
-//     </div>
-//   );
-// }
-
-// ✅ AdminInstr.jsx 전체 렌더링 포함 버전
+//  AdminInstr.jsx 전체 렌더링 포함 버전
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
@@ -483,7 +164,7 @@ export default function AdminInstr() {
         <h1 className="text-2xl font-bold mb-6">담당자 관리</h1>
 
         <div className={`flex gap-4 mb-4 items-center no-print text-sm ${styles['no-print']}`}>
-          <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="border border-gray-400 px-3 py-1.5 rounded">
+          <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="border border-gray-400 px-3 py-1.5 rounded cursor-pointer">
             {courses.map(course => (
               <option key={course.lectureId} value={course.lectureId}>{course.lectureTitle}</option>
             ))}
@@ -498,10 +179,10 @@ export default function AdminInstr() {
           <>
             <div className={`flex justify-end mb-2 ${styles['no-print']}`}>
               <div className="flex gap-2">
-                <button onClick={handleOpenModal} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm">등록</button>
-                <button onClick={handleRemove} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm">해지</button>
+                <button onClick={handleOpenModal} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">등록</button>
+                <button onClick={handleRemove} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">해지</button>
                 <ExcelExportButton data={filtered} filename="담당자_리스트" columns={[{ key: 'name', label: '이름' }, { key: 'phone', label: '전화번호' }, { key: 'birth', label: '생년월일' }]} />
-                <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm">프린트</button>
+                <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">프린트</button>
               </div>
             </div>
 
@@ -561,7 +242,7 @@ export default function AdminInstr() {
 
             <div className={`mt-6 flex items-center justify-between relative ${styles['no-print']}`}>
               <div className="text-sm">
-                <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm">
+                <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm cursor-pointer">
                   <option value={10}>10개씩</option>
                   <option value={20}>20개씩</option>
                   <option value={30}>30개씩</option>
@@ -575,7 +256,7 @@ export default function AdminInstr() {
         )}
 
         {isModalOpen && (
-          <div className={`fixed inset-0 bg-black bg-opacity-30 z-50 flex items-center justify-center ${styles['no-print']}`}>
+          <div className={`fixed inset-0 bg-black/50 bg-opacity-30 z-50 flex items-center justify-center ${styles['no-print']}`}>
             <div className="bg-white rounded-lg w-[600px] p-6 shadow-lg relative">
               <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl" onClick={() => setIsModalOpen(false)}>&times;</button>
               <h2 className="text-lg font-semibold mb-4">강사 등록</h2>

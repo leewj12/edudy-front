@@ -47,7 +47,7 @@ export default function Sidebar() {
     {
       label: '수강생', icon: <Users size={16} />, subItems: [
         { label: '수강생 관리', path: '/admin/lecture/part/list' },
-        { label: '상담일지', path: '/students/counsel' },
+        { label: '상담일지', path: '/admin/consult' },
       ]
     },
     
@@ -66,8 +66,8 @@ export default function Sidebar() {
 
     {
       label: '만족도 평가', icon: <ClipboardList size={16} />, subItems: [
-        { label: '만족도 평가 결과', path: '/evaluation/results' },
-        { label: '평가 항목 설정', path: '/evaluation/settings' },
+        { label: '만족도 평가 결과', path: '/admin/survey/list' },
+        { label: '평가 항목 설정', path: '/admin/survey' },
       ]
     },
 
@@ -91,9 +91,9 @@ export default function Sidebar() {
       style={{ backgroundColor: '#1B2D4D' }}
     >
       {/* 상단 로고 + 화살표 버튼 */}
-      <div className="flex items-center justify-between px-4 py-4">
+      <div className="flex items-center justify-between px-4 py-4 mt-2">
         {!isCollapsed && (
-          <Link to="/">
+          <Link to="/admin/dashboard">
           {/* <Link to="/admin/dashboard"> */}
             <img src={logo} alt="Edudy Logo" className="w-[85px] h-[39.39px]" />
           </Link>
@@ -125,7 +125,7 @@ export default function Sidebar() {
                   {/* 상위 메뉴 (토글용) */}
                   <div
                     className={`flex justify-between items-center px-4 py-3 cursor-pointer text-m font-bold
-                      ${openMenu === item.label ? 'bg-blue-900' : ''}
+                      ${openMenu === item.label ? 'bg-[#36FFD7] text-black' : ''}
                       hover:bg-[#36FFD7] hover:text-black`}
                     onClick={() => handleMenuClick(item.label)}
                   >
@@ -141,12 +141,12 @@ export default function Sidebar() {
 
                   {/* 서브 메뉴 */}
                   {openMenu === item.label && (
-                    <div className="bg-blue-900 text-white text-m">
+                    <div className="bg-[#36FFD7]/20 text-white text-m">
                       {item.subItems.map((sub, idx) => (
                         <Link
                           to={sub.path}
                           key={idx}
-                          className="block pl-10 pr-4 py-2 hover:bg-blue-800 cursor-pointer"
+                          className="block pl-10 pr-4 py-2 hover:bg-[#36FFD7]/20 cursor-pointer"
                         >
                           {sub.label}
                         </Link>

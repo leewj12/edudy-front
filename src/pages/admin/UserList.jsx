@@ -91,7 +91,7 @@ export default function UserList() {
 
         {/* 필터 */}
         <form
-          className="flex gap-4 mb-4 items-center text-sm"
+          className="flex gap-4 mb-4 items-center text-sm" 
           onSubmit={(e) => {
             e.preventDefault();
             handleSearch();
@@ -99,7 +99,7 @@ export default function UserList() {
         >
           {/* 🔁 셀렉트 박스 먼저 */}
           <select
-            className="border px-3 py-2 rounded"
+            className="border px-3 py-2 rounded cursor-pointer"
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
@@ -118,7 +118,7 @@ export default function UserList() {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <button type="submit" className="bg-[#192a48] text-white px-4 py-2 rounded">조회</button>
+          <button type="submit" className="bg-[#192a48] text-white px-4 py-2 rounded cursor-pointer">조회</button>
         </form>
 
         {/* 액션버튼 */}
@@ -126,19 +126,19 @@ export default function UserList() {
           <select
             value={roleToUpdate}
             onChange={(e) => setRoleToUpdate(e.target.value)}
-            className="border border-gray-400 rounded px-2 py-1"
+            className="border border-gray-400 rounded px-2 py-1 cursor-pointer"
           >
             <option value="">등급 수정</option>
             <option value="USER">일반회원</option>
             <option value="INSTRUCTOR">강사</option>
           </select>
-          <button onClick={handleUpdateRole} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50">수정</button>
+          <button onClick={handleUpdateRole} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 cursor-pointer">수정</button>
           <ExcelExportButton
             data={filtered}
             filename="회원목록"
             columns={[{ key: 'userId', label: 'ID' }, { key: 'usersName', label: '이름' }, { key: 'userEmail', label: '이메일' }, { key: 'userRole', label: '등급' }]}
           />
-          <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50">프린트</button>
+          <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 cursor-pointer">프린트</button>
         </div>
 
         {/* 테이블 */}
@@ -151,6 +151,7 @@ export default function UserList() {
               <th className="px-2 py-2 text-center no-print">
                 <input
                   type="checkbox"
+                  className='cursor-pointer'
                   onChange={(e) => setSelectedIds(e.target.checked ? paginated.filter(i => i.userRole !== 'ADMIN').map(i => i.userId) : [])}
                   checked={paginated.length > 0 && paginated.filter(i => i.userRole !== 'ADMIN').every(i => selectedIds.includes(i.userId))}
                 />
@@ -173,6 +174,7 @@ export default function UserList() {
                   <td className="px-2 py-2 text-center no-print">
                     <input
                       type="checkbox"
+                      className='cursor-pointer'
                       disabled={user.userRole === 'ADMIN'}
                       checked={selectedIds.includes(user.userId)}
                       onChange={() => handleCheck(user.userId)}
