@@ -1,0 +1,63 @@
+/* 요일 색상 */
+.fc .fc-day-sun a {
+  color: red;
+}
+.fc .fc-day-sat a {
+  color: blue;
+}
+.fc .fc-col-header-cell-cushion{
+  font-size: 11px;
+}
+
+.fc .fc-scroller{
+  overflow: hidden;
+}
+/* 오늘 날짜 배경 */
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: #dad70a4b;
+}
+.fc-today-button .fc-button .fc-button-primary{
+  color:black;
+  background-color: white;
+
+}
+.fc .fc-daygrid-day-number{
+  font-size: 11px;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+  display: flex !important;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+
+}
+
+/* 내부 요소 묶음들이 줄바꿈 안 되게 강제 */
+.fc .fc-toolbar-chunk {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+/* 달력 왼쪽 제목 2025년 6월 */
+.fc .fc-toolbar-title {
+  font-size: 15px;
+  font-weight: bold;
+}
+/* 버튼 스타일 */
+.fc .fc-button-group{
+  font-size: 12px;
+  color: rgb(255, 255, 255) !important;
+  background-color: #000000 !important;
+}
+
+.fc .fc-button:hover {
+  background-color: #777;
+}
+
+
+/* 셀 크기 */
+.fc-theme-standard td {
+  height: 50px;
+}

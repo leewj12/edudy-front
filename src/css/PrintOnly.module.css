@@ -1,0 +1,24 @@
+/* component/admin/PrintOnly.module.css */
+@media print {
+  :global(body *) {
+    visibility: hidden;
+  }
+
+  :global(#print-area),
+  :global(#print-area *) {
+    visibility: visible;
+  }
+
+  :global(#print-area) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* padding: 32px; */
+    background: white;
+  }
+
+  :global(.no-print) {
+    display: none !important;
+  }
+}
