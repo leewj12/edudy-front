@@ -23,7 +23,7 @@ React + Vite 기반의 교육 기관 관리 시스템 프론트엔드입니다.
 | 프로젝트 유형 | 팀 프로젝트 (포트폴리오) |
 | 개발 기간 | 2024.11 ~ 2024.12 |
 | 백엔드 | [edudy](https://github.com/leewj12/edudy) (Spring Boot, EC2 배포) |
-| 배포 주소 | Vercel |
+| 배포 주소 | [edudy.wonjae.cloud](https://edudy.wonjae.cloud) |
 
 ---
 
