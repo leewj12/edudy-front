@@ -160,7 +160,8 @@ const getKeywordLabel = (type, keyword) => {
         {!selectedCourse && (
           <div>
             <h2 className="text-2xl font-semibold mb-4">진행 중인 과정</h2>
-            <table className="w-full border-t border-gray-200 text-center">
+            <div className="overflow-x-auto">
+            <table className="w-full border-t border-gray-200 text-center min-w-[500px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="py-2 px-3">과정명</th>
@@ -182,6 +183,7 @@ const getKeywordLabel = (type, keyword) => {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
         {selectedCourse && (
@@ -232,7 +234,8 @@ const getKeywordLabel = (type, keyword) => {
               </div>
             </div>
 
-            <table className="w-full border-t border-gray-200 text-center">
+            <div className="overflow-x-auto">
+            <table className="w-full border-t border-gray-200 text-center min-w-[600px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="print:hidden">
@@ -307,21 +310,23 @@ const getKeywordLabel = (type, keyword) => {
                 ))}
               </tbody>
             </table>
+            </div>
 
             <div className="flex justify-center mt-6">
-              <button onClick={() => setSelectedCourse(null)} 
+              <button onClick={() => setSelectedCourse(null)}
               className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">과정 목록으로</button>
             </div>
           </div>
         )}
 
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 print:block print:bg-white">
-            <div className="bg-white rounded-lg p-8 w-full max-w-3xl print:w-full print:max-w-none print:p-0" id="print-area">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 print:block print:bg-white">
+            <div className="bg-white rounded-lg p-4 md:p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto print:w-full print:max-w-none print:p-0" id="print-area">
               <h3 className="text-xl font-bold mb-3 text-left pb-2 print:mt-10">상담 일지</h3>
-              <form className="text-sm w-full print:w-full print:mt-[30mm]" id="print-area"onSubmit={handleSubmit}>
+              <form className="text-sm w-full print:w-full print:mt-[30mm]" onSubmit={handleSubmit}>
                 {/* 🔷 상단 테이블 */}
-                <table className="w-full border border-l-0 border-r-0 border-gray-400 text-sm table-fixed">
+                <div className="overflow-x-auto">
+                <table className="w-full border border-l-0 border-r-0 border-gray-400 text-sm table-fixed min-w-[600px]">
                   <tbody>
                     {/* 첫 줄: 상담일자 / 분류 / 태그 */}
                     <tr className="border-gray-400 border-b border-t">
@@ -404,6 +409,7 @@ const getKeywordLabel = (type, keyword) => {
                     </tr>
                   </tbody>
                 </table>
+                </div>
 
                 {/* 🔻 하단: 상담내용 + 특이사항 */}
                 <table className="w-full border border-l-0 border-r-0 border-t-0 border-gray-400 text-sm table-fixed mb-6">

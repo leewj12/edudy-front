@@ -65,9 +65,6 @@ export default function AdminBanner() {
       formData.append('bannerPriority', (targetIndex + 1).toString());
       if (imageFile) formData.append('bannerImageFile', imageFile);
 
-      for (let [k, v] of formData.entries()) {
-      }
-
       if (selectedLecture.bannerId) {
         // 수정
         await axios.put(`/admin/banner/${selectedLecture.bannerId}`, formData, {

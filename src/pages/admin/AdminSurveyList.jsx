@@ -126,7 +126,7 @@ export default function AdminSurveyList() {
         <h1 className="text-2xl font-bold mb-6">만족도 조사 목록</h1>
 
         {/* 필터 */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6">
           <select
             className="border border-gray-400 px-4 py-2 rounded"
             value={selectedCourseId}
@@ -194,8 +194,8 @@ export default function AdminSurveyList() {
         </div>
 
         {modalDetail && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-xl shadow-lg w-[600px] max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-xl max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-bold text-center mb-6 border-b pb-3">{modalDetail.lectureSurveyTitle}</h2>
 
               <div className="space-y-6">

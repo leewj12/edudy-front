@@ -137,15 +137,14 @@ export default function TrainDetail() {
   }, [lectureId]);
 
   return (
-    <div className="flex w-screen ">
-      <main className="flex-1 bg-white p-6">
+    <AdminLayout>
         <PageMeta title="훈련일지 목록" description="선택한 과정의 훈련일지를 관리합니다." />
         <h1 className="text-2xl font-bold mb-2">훈련일지 목록</h1>
         <p className="text-gray-600 ml-1 mb-4">
           {lectureTitle} ({lectureStart} ~ {lectureEnd})
         </p>
 
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex flex-wrap items-center gap-4 mb-4">
         <input
           type="date"
           value={fromDate}

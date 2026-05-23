@@ -127,7 +127,7 @@ const [modalMessage, setModalMessage] = useState('');
         <PageMeta title="문자 발송" description="수강생 문자 관리" />
         <h1 className="text-2xl font-bold mb-6">문자 발송</h1>
 
-        <div className="flex gap-4 mb-4 items-center text-sm">
+        <div className="flex flex-wrap gap-4 mb-4 items-center text-sm">
           <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="border px-3 py-1.5 rounded border-gray-400 cursor-pointer">
             {courseList.map((c) => <option key={c.lectureId} value={c.lectureId}>{c.lectureTitle}</option>)}
           </select>

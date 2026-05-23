@@ -243,10 +243,8 @@ export default function Score() {
 
                       {/* 웹용 평균 점수 */}
                       <tr className="bg-gray-50 font-semibold no-print">
-                        <td colSpan="1"></td>
-                        <td className="py-2 px-3 text-center">평균 점수</td>
-                        <td colSpan="3"></td>
-                        <td className="text-center">{average ?? '-'}</td>
+                        <td colSpan="4" className="py-2 px-3 text-right">평균 점수</td>
+                        <td className="py-2 px-3 text-center">{average != null ? `${average}점` : '-'}</td>
                         <td colSpan="2"></td>
                       </tr>
                     </tbody>

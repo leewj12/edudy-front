@@ -160,7 +160,7 @@ export default function AdminInstr() {
         <PageMeta title="담당자 관리" description="과정을 담당할 강사를 배정합니다" />
         <h1 className="text-2xl font-bold mb-6">담당자 관리</h1>
 
-        <div className={`flex gap-4 mb-4 items-center no-print text-sm ${styles['no-print']}`}>
+        <div className={`flex flex-wrap gap-4 mb-4 items-center no-print text-sm ${styles['no-print']}`}>
           <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="border border-gray-400 px-3 py-1.5 rounded cursor-pointer">
             {courses.map(course => (
               <option key={course.lectureId} value={course.lectureId}>{course.lectureTitle}</option>
