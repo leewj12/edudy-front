@@ -1,8 +1,7 @@
 // src/pages/admin/LectureEdit.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 
@@ -41,7 +40,7 @@ export default function LectureEdit() {
           axios.get(`/admin/lecture/${lectureId}`),
         ]);
         setCategoryList(categoryRes.data);
-  
+
         // 기존 form은 유지하고 과목만 subjectTitles로 대체
         setForm((prev) => ({
           ...prev,
@@ -59,7 +58,7 @@ export default function LectureEdit() {
         navigate('/admin/lecture/list');
       }
     };
-  
+
     fetchData();
   }, [lectureId, navigate]);
 
@@ -144,20 +143,18 @@ export default function LectureEdit() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
-        <PageMeta title="과정 수정" description="과정을 수정할 수 있습니다." />
-        <Header />
+    <AdminLayout>
+      <PageMeta title="과정 수정" description="과정을 수정할 수 있습니다." />
 
-        <section className="bg-white p-6 rounded-lg min-w-[1200px]">
-          <h1 className="text-2xl font-bold mb-6">과정 수정</h1>
+      <section className="bg-white p-4 md:p-6 rounded-xl">
+        <h1 className="text-2xl font-bold mb-6">과정 수정</h1>
 
-          <form onSubmit={handleSubmit} className="w-full">
-            <table className="w-full border border-gray-300 text-sm">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-300 text-sm min-w-[500px]">
               <tbody>
                 <tr>
-                  <td className="w-40 font-medium border border-gray-300 px-3 py-2">카테고리</td>
+                  <td className="w-28 md:w-40 font-medium border border-gray-300 px-3 py-2 bg-gray-50">카테고리</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <select name="lectureCategory" value={form.lectureCategory} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required>
                       <option value="">선택하세요</option>
@@ -166,14 +163,20 @@ export default function LectureEdit() {
                       ))}
                     </select>
                   </td>
-                  <td className="w-40 font-medium border border-gray-300 px-3 py-2">과정명</td>
+                  <td className="w-28 md:w-40 font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">과정명</td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input type="text" name="lectureTitle" value={form.lectureTitle} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="w-28 font-medium border border-gray-300 px-3 py-2 bg-gray-50">과정명</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="text" name="lectureTitle" value={form.lectureTitle} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">요약명</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">요약명</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="text" name="lectureShortTitle" value={form.lectureShortTitle || ''} onChange={(e) => {
                       if (e.target.value.length <= 8) {
@@ -181,47 +184,68 @@ export default function LectureEdit() {
                       }
                     }} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">최대 인원</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">최대 인원</td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input type="number" name="lectureCapacity" value={form.lectureCapacity} onChange={handleChange} min="1" className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">최대 인원</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="number" name="lectureCapacity" value={form.lectureCapacity} onChange={handleChange} min="1" className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">과정 내용 이미지</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="file" accept="image/*" onChange={(e) => setLectureContentImage(e.target.files[0])} className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">썸네일 이미지</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="file" accept="image/*" onChange={(e) => setLectureThumbnail(e.target.files[0])} className="w-full border border-gray-300 rounded px-3 py-2" />
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">내용 이미지</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <input type="file" accept="image/*" onChange={(e) => setLectureContentImage(e.target.files[0])} className="w-full text-sm" />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">시작 시간</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">썸네일</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <input type="file" accept="image/*" onChange={(e) => setLectureThumbnail(e.target.files[0])} className="w-full text-sm" />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">시작 시간</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="time" name="lectureStartTime" value={form.lectureStartTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">종료 시간</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">종료 시간</td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input type="time" name="lectureEndTime" value={form.lectureEndTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">종료 시간</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="time" name="lectureEndTime" value={form.lectureEndTime} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">시작일</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">시작일</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="date" name="lectureStart" value={form.lectureStart} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">종료일</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">종료일</td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input type="date" name="lectureEnd" value={form.lectureEnd} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">종료일</td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="date" name="lectureEnd" value={form.lectureEnd} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">우편번호</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">우편번호</td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     <div className="relative w-full">
                       <input type="text" name="lecturePostcode" value={form.lecturePostcode} readOnly className="w-full border border-gray-300 rounded px-3 py-2 pr-[100px]" required />
@@ -233,28 +257,28 @@ export default function LectureEdit() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">주소</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">주소</td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     <input type="text" name="lectureAddress" value={form.lectureAddress} readOnly className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">상세 주소</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">상세 주소</td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     <input type="text" name="lectureAddressDetail" value={form.lectureAddressDetail} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">과정 설명</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">과정 설명</td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     <input type="text" name="lectureDescription" value={form.lectureDescription} onChange={handleChange} className="w-full border border-gray-300 rounded px-3 py-2" />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2 align-top">과목</td>
+                  <td className="font-medium border border-gray-300 px-3 py-2 align-top bg-gray-50">과목</td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     {form.subjects.map((curr, idx) => (
                       <div key={idx} className="flex items-center gap-2 mb-2">
@@ -301,18 +325,18 @@ export default function LectureEdit() {
 
               </tbody>
             </table>
+          </div>
 
-            <div className="pt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => navigate('/admin/lecture/list')} className="px-4 py-2 border border-gray-400 rounded">
-                취소
-              </button>
-              <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
-                수정
-              </button>
-            </div>
-          </form>
-        </section>
-      </main>
-    </div>
+          <div className="pt-6 flex justify-end gap-3">
+            <button type="button" onClick={() => navigate('/admin/lecture/list')} className="px-4 py-2 border border-gray-400 rounded hover:bg-gray-50">
+              취소
+            </button>
+            <button type="submit" className="bg-[#192a48] hover:bg-[#142033] text-white px-6 py-2 rounded">
+              수정
+            </button>
+          </div>
+        </form>
+      </section>
+    </AdminLayout>
   );
 }

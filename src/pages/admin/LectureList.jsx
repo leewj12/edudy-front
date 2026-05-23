@@ -1,7 +1,6 @@
 // src/pages/admin/CourseList.jsx
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import { useAuth } from '../../context/AuthContext';
@@ -36,28 +35,24 @@ export default function LectureList() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
+    <AdminLayout>
+      <PageMeta title="강의 목록" description="등록된 강의 정보를 확인하고 관리할 수 있습니다." />
 
-      <main className="flex-1 overflow-y-auto bg-white p-6 text-sm">
-        <PageMeta title="강의 목록" description="등록된 강의 정보를 확인하고 관리할 수 있습니다." />
-        <Header />
+      <section className="mt-4 text-sm">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-semibold">강의 목록</h1>
+          {userRole !== 'ROLE_INSTRUCTOR' && (
+          <button
+            onClick={() => window.location.href = '/admin/lecture/new'}
+            className="border border-gray-400 px-3 py-1.5 rounded hover:bg-gray-50 cursor-pointer"
+          >
+            강의 등록
+          </button>
+          )}
+        </div>
 
-        <section className="p-6 mt-4 min-w-[1200px]">
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-xl font-semibold">강의 목록</h1>
-            {userRole !== 'ROLE_INSTRUCTOR' && (
-            <button
-              onClick={() => window.location.href = '/admin/lecture/new'}
-              className="border border-gray-400 px-3 py-1.5 rounded"
-            >
-              강의 등록
-            </button>
-            )}
-          </div>
-          
-
-          <table className="w-full border-t border-gray-200 text-center">
+        <div className="overflow-x-auto">
+          <table className="w-full border-t border-gray-200 text-center min-w-[700px]">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
                 <th className="py-2 px-3">강의명</th>
@@ -79,7 +74,7 @@ export default function LectureList() {
                 onClick={() => navigate(`/admin/lecture/${lecture.lectureId}`)}
               >
                 <td className="py-2 px-3 font-medium">{lecture.lectureTitle}</td>
-                <td className="py-2 px-3">{lecture.lectureStart} ~ {lecture.lectureEnd}</td>
+                <td className="py-2 px-3 whitespace-nowrap">{lecture.lectureStart} ~ {lecture.lectureEnd}</td>
                 <td className="py-2 px-3">{lecture.lectureWaiting}명</td>
                 <td className="py-2 px-3">{lecture.lectureEnrolled}/{lecture.lectureCapacity}명</td>
                 <td className="py-2 px-3">
@@ -121,8 +116,8 @@ export default function LectureList() {
 
             </tbody>
           </table>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+    </AdminLayout>
   );
 }

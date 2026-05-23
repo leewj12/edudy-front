@@ -81,9 +81,8 @@
 //   const availableLectures = allLectures.filter(l => dayjs(l.lectureStart).isAfter(today));
 
 //   return (
-//     <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-//       <Sidebar />
-//       <main className="flex-1 overflow-y-auto bg-white p-6">
+//     <AdminLayout>
+//       
 //         <PageMeta title="사이트 노출 관리" description="사이트 노출 순위를 관리합니다." />
 //         <Header />
 //         <h1 className="text-2xl font-bold p-3">사이트 노출 관리</h1>
@@ -199,14 +198,13 @@
 //             </div>
 //           </div>
 //         )}
-//       </main>
+//       
 //     </div>
 //   );
 // }
 
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import dayjs from 'dayjs';
@@ -288,11 +286,9 @@ export default function AdminNavigation() {
     .filter(l => !priorityList.some(p => p?.lectureId === l.lectureId)); // 우선순위 등록 강의 제외
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="사이트 노출 관리" description="사이트 노출 순위를 관리합니다." />
-        <Header />
         <h1 className="text-2xl font-bold p-3">사이트 노출 관리</h1>
 
         {/* 추가 버튼: 우선순위 5개가 다 찼을 경우 숨김 */}
@@ -419,7 +415,7 @@ export default function AdminNavigation() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

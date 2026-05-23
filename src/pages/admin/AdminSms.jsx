@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import Pagination from '../../components/Pagination';
 import axios from '../../api/axiosInstance';
@@ -123,11 +122,9 @@ const [modalMessage, setModalMessage] = useState('');
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="문자 발송" description="수강생 문자 관리" />
-        <Header />
         <h1 className="text-2xl font-bold mb-6">문자 발송</h1>
 
         <div className="flex gap-4 mb-4 items-center text-sm">
@@ -212,7 +209,7 @@ const [modalMessage, setModalMessage] = useState('');
             </div>
           </div>
         )}
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

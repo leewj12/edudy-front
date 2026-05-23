@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 
@@ -95,11 +94,9 @@ export default function Category() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="카테고리 관리" description="과정 카테고리를 관리합니다." />
-        <Header />
 
         <h1 className="text-2xl font-bold p-3">카테고리 관리</h1>
 
@@ -207,7 +204,7 @@ export default function Category() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

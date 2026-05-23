@@ -72,9 +72,8 @@
 
 
 //   return (
-//     <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-//       <Sidebar />
-//       <main className="flex-1 overflow-y-auto bg-white p-6">
+//     <AdminLayout>
+//       
 //         <PageMeta title="공지사항 관리" description="운영 공지사항을 확인하고 등록할 수 있습니다." />
 //         <Header />
 
@@ -168,7 +167,7 @@
 //             </tbody>
 //           </table>
 //         </div>
-//       </main>
+//       
 //     </div>
 //   );
 // }
@@ -177,8 +176,7 @@
 // src/pages/admin/AdminNoticePage.jsx
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 
 export default function AdminNoticePage() {
@@ -245,11 +243,9 @@ export default function AdminNoticePage() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6 text-sm">
+    <AdminLayout>
+      
         <PageMeta title="공지사항 관리" description="운영 공지사항을 확인하고 등록할 수 있습니다." />
-        <Header />
 
         <div className="max-w-[1300px] mx-auto mt-6">
           <h1 className="text-xl font-semibold mb-6">운영 공지사항</h1>
@@ -341,7 +337,7 @@ export default function AdminNoticePage() {
             </tbody>
           </table>
         </div>
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

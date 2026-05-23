@@ -1,12 +1,10 @@
 import React, { useEffect,useState } from 'react';
 {/* 사이드바 컴포넌트 */}
-import Sidebar from '../../components/Sidebar';
+import AdminLayout from '../../components/AdminLayout';
 {/* 물음표 툴팁 컴포넌트 */}
 import TooltipLabel from '../../components/TooltipLabel';
 {/* head변경 가능한 컴포넌트 */}
 import PageMeta from '../../components/PageMeta';
-{/* 헤더 컴포넌트 */}
-import Header from '../../components/Header';
 {/* 현황요약 컴포넌트 */}
 import StatCard from '../../components/admindashboard/StatCard';
 {/* 운영 일정 관리탭에 들어가는 컴포넌트*/}
@@ -28,13 +26,13 @@ import SatisfactionCardGroup from '../../components/admindashboard/SatisfactionC
 
 export default function Dashboard() {
 
-  const [activeTab, setActiveTab] = useState(0); //처음 화면일때 탭 디폴트 값 
+  const [activeTab, setActiveTab] = useState(0); //처음 화면일때 탭 디폴트 값
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
   // 추후 백엔드 연동을 대비한 더미 데이터
   const dummyStats = {
-    totalCourses: 4,   
+    totalCourses: 4,
     averageAttendance: '90%',
     dangerStudents: 6,
     recruitingCourses: 3,
@@ -58,54 +56,47 @@ export default function Dashboard() {
   const tabs = ['운영 일정 관리', '출결 현황', '모집강의 현황', '수강생 주요 지표'];
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-
-      <main className="flex-1 overflow-y-auto bg-white p-6">
-        
+    <AdminLayout>
       {/* 페이지 헤더정보 */}
       <PageMeta title="관리자 대시보드" description="관리자 대시보드 입니다." />
 
-       <Header /> 
-
         {/* 오늘 현황 요약 */}
-        <section className="mb-8">
-          <section className="bg-white p-6 rounded-lg border border-gray-200 mb-6 min-w-[1200px]"
-          style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)' }}>
+        <section className="mb-6">
+          <section className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
             <div className="flex items-center gap-4 mb-4">
-              <h1 className="text-xl font-bold">
-                오늘 현황 요약 
+              <h1 className="text-lg md:text-xl font-bold">
+                오늘 현황 요약
               </h1>
               <span className="text-xs text-gray-400">{formattedDate}</span>
             </div>
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
 
-            <StatCard 
-            label="운영 강의" 
+            <StatCard
+            label="운영 강의"
             value={stats?.totalCourses ?? "-"}
             color="bg-blue-50"
             valueColor="text-blue-600"/>
 
-            <StatCard 
-            label="운영 강의 평균 출석률" 
+            <StatCard
+            label="운영 강의 평균 출석률"
             value={stats?.averageAttendance ?? "-"}
             color="bg-blue-50"
             valueColor="text-blue-600"/>
 
-            <StatCard 
+            <StatCard
             label={
               <TooltipLabel
                   label="위험 수강생"
                   tooltipId="danger-tooltip"
                   tooltipText="출석률이 낮거나 상담이 필요한 학생을 의미합니다"
-              />              
+              />
             }
             value={stats?.dangerStudents ?? "-"}
             color="bg-pink-50"
             valueColor="text-pink-600"
             highlight />
 
-            <StatCard label="모집 중 강의" 
+            <StatCard label="모집 중 강의"
             value={stats?.recruitingCourses ?? "-"}
             color="bg-gray-50"
             valueColor="text-black"
@@ -116,9 +107,9 @@ export default function Dashboard() {
                 label="평균 만족도"
                 tooltipId="satisfaction-tooltip"
                 tooltipText="강의 평균 만족도 입니다"
-              />          
-            } 
-            value={stats?.satisfaction ?? "-"} 
+              />
+            }
+            value={stats?.satisfaction ?? "-"}
             color="bg-gray-50"
             valueColor="text-black"/>
 
@@ -127,14 +118,13 @@ export default function Dashboard() {
         </section>
 
         {/* 탭 메뉴 */}
-        <section 
-        className="bg-white p-6 rounded-lg border border-gray-200 mb-6 min-w-[1200px]"
-        style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)' }}>
-          <div className="flex space-x-4 text-base font-bold">
+        <section
+        className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
+          <div className="flex overflow-x-auto gap-1 text-sm md:text-base font-bold border-b border-gray-200 -mx-4 md:-mx-6 px-4 md:px-6">
             {tabs.map((tab, index) => (
               <button
                 key={index}
-                className={`pb-5 px-22 border-b-2 ${
+                className={`pb-3 px-3 md:px-6 border-b-2 whitespace-nowrap transition-colors ${
                   activeTab === index
                     ? 'border-blue-600 text-blue-600'
                     : 'border-transparent text-gray-400 hover:text-blue-500'
@@ -148,38 +138,38 @@ export default function Dashboard() {
 
           {/* 운영 일정 관리 탭 내용 */}
           {activeTab === 0 && (
-          <div className="flex gap-8">
+          <div className="flex flex-col lg:flex-row gap-6 mt-6">
 
-            <div className="w-1/2 h-[400px]">
+            <div className="w-full lg:w-1/2 h-[400px]">
               <CalendarSection />
             </div>
 
             {/* 오른쪽: 일정 + 공지사항 */}
-            <div className="w-1/2 flex flex-col gap-7">
-              
+            <div className="w-full lg:w-1/2 flex flex-col gap-7">
+
               {/* 이번주 주요 일정 */}
               <WeeklySchedule />
 
-              {/* 운영 공지사항 테이블 */}          
+              {/* 운영 공지사항 테이블 */}
               <NoticeTable />
             </div>
-          </div>  
+          </div>
         )}
 
           {/* 출결현황 탭 내용 */}
           {activeTab === 1 && (
           <div>
-            <div className="mt-4 grid grid-cols-9 gap-7">
-              {/* 좌측 2칸 */}
-              <div className="col-span-4">
+            <div className="mt-4 grid grid-cols-1 lg:grid-cols-9 gap-7">
+              {/* 좌측 */}
+              <div className="lg:col-span-4">
               {/* 이탈자 예측 알림 카드 영역 */}
               <div className="space-y-4">
                 <h2 className="text-sm font-semibold mb-4">이탈자 예측 알림
                 <TooltipLabel
                   tooltipId="dropout-tooltip"
                   tooltipText="가장 예의주시 해야하는 두명을 나타냅니다"
-                />      
-                </h2> 
+                />
+                </h2>
                 <DropoutAlertCard
                   rank="1순위"
                   name="김지은"
@@ -214,18 +204,18 @@ export default function Dashboard() {
               </div>
             </div>
 
-              {/* 우측: 상담 태그 + 모집 현황 테이블 */}
-              <div className="col-span-5 min-w-[600px] flex flex-col mt-2">
+              {/* 우측 */}
+              <div className="lg:col-span-5 flex flex-col mt-2">
               <AttendanceBarChart />
-                
+
               </div>
             </div>
           </div>
           )}
-          
+
           {/* 모집강의 현황 탭 내용 */}
           {activeTab === 2 && (
-          <div className="mt-6 text-sm text-gray-600">
+          <div className="mt-6 text-sm text-gray-600 overflow-x-auto">
             <CourseRecruitmentTable />
             <div>
               <InquiryTable />
@@ -235,30 +225,29 @@ export default function Dashboard() {
           {/* 수강생 주요 지표 탭 내용 */}
           {activeTab === 3 && (
              <div className="mt-6 text-sm text-gray-600">
-    
+
               {/* 상담 태그: 상단 전체 */}
               <ConsultTagList />
-         
+
               {/* 하단 2단 레이아웃 (좌: 취업률, 우: 수료율카드) */}
-              <div className="grid grid-cols-9 gap-10 mt-10">
-                
+              <div className="grid grid-cols-1 lg:grid-cols-9 gap-6 lg:gap-10 mt-10">
+
                 {/* 왼쪽: 취업률 그래프 */}
-                <div className="col-span-4">
+                <div className="lg:col-span-4">
                   <h2 className="text-sm font-semibold mb-2">강의별 취업률</h2>
                   <EmploymentBarChart />
                 </div>
 
                 {/* 오른쪽: 수료율 카드 */}
-                <div className="col-span-5">
+                <div className="lg:col-span-5">
                   <h2 className="text-sm font-semibold mb-2">강의별 수료율 카드</h2>
                   <SatisfactionCardGroup />
                 </div>
 
               </div>
-            </div> 
-          )}  
+            </div>
+          )}
         </section>
-      </main>
-    </div>
+    </AdminLayout>
   );
 }

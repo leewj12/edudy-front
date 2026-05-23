@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import Pagination from '../../components/Pagination';
 import ExcelExportButton from '../../component/admin/ExcelExportButton';
@@ -88,7 +87,7 @@ export default function LecturePartList() {
       if (!selectedCourse) return;
       try {
         const partRes = await axios.get(`/admin/lecture/part/list/${selectedCourse}`);
-  
+
         const valid = partRes.data
           .filter(item => item.status !== 'DROPPED')
           .map(item => ({
@@ -101,7 +100,7 @@ export default function LecturePartList() {
             risk: item.danger === 'NORMAL' ? '정상' : item.danger === 'WARN' ? '주의' : '경고',
             course: selectedCourse,
           }));
-  
+
         setOriginalData(valid);
         setFiltered(valid);
       } catch (err) {
@@ -110,7 +109,7 @@ export default function LecturePartList() {
         setFiltered([]);
       }
     };
-  
+
     fetchParticipants();
   }, [selectedCourse]);
 
@@ -120,7 +119,7 @@ export default function LecturePartList() {
       return;
     }
     if (!window.confirm('선택한 수강생들을 제적 처리하시겠습니까?')) return;
-  
+
     try {
       for (const id of selectedIds) {
         await axios.patch(`/admin/lecture/part/update/${id}`, {
@@ -149,160 +148,156 @@ export default function LecturePartList() {
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
-        <PageMeta title="수강생 관리" description="수강생 정보 관리" />
-        <Header />
-        <h1 className="text-2xl font-bold mb-6">수강생 관리</h1>
+    <AdminLayout>
+      <PageMeta title="수강생 관리" description="수강생 정보 관리" />
+      <h1 className="text-2xl font-bold mb-6">수강생 관리</h1>
 
-        <div className="flex gap-4 mb-4 items-center no-print text-sm">
-          <select
-            value={selectedCourse}
-            onChange={(e) => setSelectedCourse(e.target.value)}
-            className="border border-gray-400 px-3 py-1.5 rounded"
-          >
-            {courseList.map((course) => (
-              <option key={course.lectureId} value={course.lectureId}>
-                {course.lectureTitle}
-              </option>
-            ))}
-          </select>
+      <div className="flex flex-wrap gap-3 mb-4 items-center no-print text-sm">
+        <select
+          value={selectedCourse}
+          onChange={(e) => setSelectedCourse(e.target.value)}
+          className="border border-gray-400 px-3 py-1.5 rounded"
+        >
+          {courseList.map((course) => (
+            <option key={course.lectureId} value={course.lectureId}>
+              {course.lectureTitle}
+            </option>
+          ))}
+        </select>
 
-          <select
-            value={selectedRisk}
-            onChange={(e) => setSelectedRisk(e.target.value)}
-            className="border border-gray-400 px-3 py-1.5 rounded"
-          >
-            <option value="">전체 위험도</option>
-            <option value="정상">정상</option>
-            <option value="주의">주의</option>
-            <option value="경고">경고</option>
-          </select>
+        <select
+          value={selectedRisk}
+          onChange={(e) => setSelectedRisk(e.target.value)}
+          className="border border-gray-400 px-3 py-1.5 rounded"
+        >
+          <option value="">전체 위험도</option>
+          <option value="정상">정상</option>
+          <option value="주의">주의</option>
+          <option value="경고">경고</option>
+        </select>
 
-          <input
-            type="text"
-            placeholder="이름 또는 전화번호로 검색"
-            className="border border-gray-400 px-3 py-1.5 rounded w-80"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button
-            onClick={handleSearch}
-            className="bg-[#192a48] text-white px-4 py-1.5 rounded cursor-pointer"
-          >
-            조회
-          </button>
-        </div>
+        <input
+          type="text"
+          placeholder="이름 또는 전화번호로 검색"
+          className="border border-gray-400 px-3 py-1.5 rounded w-full sm:w-80"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-[#192a48] text-white px-4 py-1.5 rounded cursor-pointer"
+        >
+          조회
+        </button>
+      </div>
 
-        {error ? (
-          <div className="text-center text-red-500 font-semibold mt-10">{error}</div>
-        ) : (
-          <>
-            <div className="flex justify-end mb-2">
-              <div className="flex gap-2">
-                <button
-                  onClick={handleBulkExpel}
-                  className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm"
-                >
-                  제적
-                </button>
-                <ExcelExportButton
-                  data={filtered}
-                  filename="수강생_리스트"
-                  columns={[
-                    { key: 'name', label: '이름' },
-                    { key: 'phone', label: '전화번호', format: (v) => v.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3') },
-                    { key: 'attendanceRate', label: '출석률', format: (v) => `${v}%` },
-                    { key: 'risk', label: '위험도' },
-                    { key: 'birth', label: '생년월일' },
-                  ]}
-                />
-                <button
-                  onClick={handlePrint}
-                  className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm"
-                >
-                  프린트
-                </button>
-              </div>
+      {error ? (
+        <div className="text-center text-red-500 font-semibold mt-10">{error}</div>
+      ) : (
+        <>
+          <div className="flex justify-end mb-2">
+            <div className="flex gap-2">
+              <button
+                onClick={handleBulkExpel}
+                className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm"
+              >
+                제적
+              </button>
+              <ExcelExportButton
+                data={filtered}
+                filename="수강생_리스트"
+                columns={[
+                  { key: 'name', label: '이름' },
+                  { key: 'phone', label: '전화번호', format: (v) => v.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3') },
+                  { key: 'attendanceRate', label: '출석률', format: (v) => `${v}%` },
+                  { key: 'risk', label: '위험도' },
+                  { key: 'birth', label: '생년월일' },
+                ]}
+              />
+              <button
+                onClick={handlePrint}
+                className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 text-sm"
+              >
+                프린트
+              </button>
             </div>
+          </div>
 
-            <div id="print-area">
-              <table className="w-full border-t border-b border-gray-300 text-center text-sm">
-                <thead>
-                  <tr className="bg-[#FAFAFA]">
-                    <th className="py-2 px-3">
-                      <input
-                        type="checkbox"
-                        onChange={(e) =>
-                          setSelectedIds(e.target.checked ? paginated.map((item) => item.id) : [])
-                        }
-                        checked={paginated.length > 0 && paginated.every((item) => selectedIds.includes(item.id))}
-                        className='no-print'
-                      />
-                    </th>
-                    <th className="py-2 px-3">이름</th>
-                    <th className="py-2 px-3">전화번호</th>
-                    <th className="py-2 px-3">출석률</th>
-                    <th className="py-2 px-3">위험도</th>
-                    <th className="py-2 px-3">생년월일</th>
+          <div id="print-area" className="overflow-x-auto">
+            <table className="w-full border-t border-b border-gray-300 text-center text-sm min-w-[600px]">
+              <thead>
+                <tr className="bg-[#FAFAFA]">
+                  <th className="py-2 px-3">
+                    <input
+                      type="checkbox"
+                      onChange={(e) =>
+                        setSelectedIds(e.target.checked ? paginated.map((item) => item.id) : [])
+                      }
+                      checked={paginated.length > 0 && paginated.every((item) => selectedIds.includes(item.id))}
+                      className='no-print'
+                    />
+                  </th>
+                  <th className="py-2 px-3">이름</th>
+                  <th className="py-2 px-3">전화번호</th>
+                  <th className="py-2 px-3">출석률</th>
+                  <th className="py-2 px-3">위험도</th>
+                  <th className="py-2 px-3">생년월일</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginated.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="text-center py-6 text-gray-400">
+                      조건에 맞는 수강생이 없습니다.
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {paginated.length === 0 ? (
-                    <tr>
-                      <td colSpan={9} className="text-center py-6 text-gray-400">
-                        조건에 맞는 수강생이 없습니다.
+                ) : (
+                  paginated.map((item) => (
+                    <tr key={item.id} className="border-t border-gray-200">
+                      <td className="py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.includes(item.id)}
+                          onChange={() => handleCheck(item.id)}
+                          className='no-print'
+                        />
                       </td>
+                      <td className="py-2 px-3">{item.name}</td>
+                      <td className="py-2 px-3 whitespace-nowrap">{item.phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')}</td>
+                      <td className="py-2 px-3">{item.attendanceRate}%</td>
+                      <td className="py-2 px-3">{item.risk}</td>
+                      <td className="py-2 px-3">{item.birth}</td>
                     </tr>
-                  ) : (
-                    paginated.map((item) => (
-                      <tr key={item.id} className="border-t border-gray-200">
-                        <td className="py-2 px-3">
-                          <input
-                            type="checkbox"
-                            checked={selectedIds.includes(item.id)}
-                            onChange={() => handleCheck(item.id)}
-                            className='no-print'
-                          />
-                        </td>
-                        <td className="py-2 px-3">{item.name}</td>
-                        <td className="py-2 px-3">{item.phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')}</td>
-                        <td className="py-2 px-3">{item.attendanceRate}%</td>
-                        <td className="py-2 px-3">{item.risk}</td>
-                        <td className="py-2 px-3">{item.birth}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between relative">
+            <div className="text-sm">
+              <select
+                value={itemsPerPage}
+                onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                className="border rounded px-2 py-1 border-gray-400 text-sm"
+              >
+                <option value={10}>10개씩</option>
+                <option value={20}>20개씩</option>
+                <option value={30}>30개씩</option>
+              </select>
             </div>
 
-            <div className="mt-6 flex items-center justify-between relative">
-              <div className="text-sm">
-                <select
-                  value={itemsPerPage}
-                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                  className="border rounded px-2 py-1 border-gray-400 text-sm"
-                >
-                  <option value={10}>10개씩</option>
-                  <option value={20}>20개씩</option>
-                  <option value={30}>30개씩</option>
-                </select>
-              </div>
-
-              <div className="absolute left-1/2 transform -translate-x-1/2">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={(page) => setCurrentPage(page)}
-                />
-              </div>
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
             </div>
-          </>
-        )}
-      </main>
-    </div>
+          </div>
+        </>
+      )}
+    </AdminLayout>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import Pagination from '../../components/Pagination';
 import ExcelExportButton from '../../component/admin/ExcelExportButton';
@@ -81,69 +80,67 @@ export default function UserList() {
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
-        <PageMeta title="회원 등급 관리" description="회원 목록을 확인하고 관리할 수 있습니다." />
-        <Header />
-        <h1 className="text-2xl font-bold mb-6">회원 등급 관리</h1>
+    <AdminLayout>
+      <PageMeta title="회원 등급 관리" description="회원 목록을 확인하고 관리할 수 있습니다." />
+      <h1 className="text-2xl font-bold mb-6">회원 등급 관리</h1>
 
-        {/* 필터 */}
-        <form
-          className="flex gap-4 mb-4 items-center text-sm" 
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSearch();
-          }}
+      {/* 필터 */}
+      <form
+        className="flex flex-wrap gap-3 mb-4 items-center text-sm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSearch();
+        }}
+      >
+        {/* 🔁 셀렉트 박스 먼저 */}
+        <select
+          className="border px-3 py-2 rounded cursor-pointer"
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
         >
-          {/* 🔁 셀렉트 박스 먼저 */}
-          <select
-            className="border px-3 py-2 rounded cursor-pointer"
-            value={roleFilter}
-            onChange={(e) => setRoleFilter(e.target.value)}
-          >
-            <option value="">전체 등급</option>
-            <option value="USER">일반회원</option>
-            <option value="INSTRUCTOR">강사</option>
-            <option value="ADMIN">관리자</option>
-          </select>
+          <option value="">전체 등급</option>
+          <option value="USER">일반회원</option>
+          <option value="INSTRUCTOR">강사</option>
+          <option value="ADMIN">관리자</option>
+        </select>
 
-          {/* 🔁 검색창 다음 */}
-          <input
-            type="text"
-            placeholder="이름 또는 이메일로 검색하세요"
-            className="border px-3 py-2 rounded w-70"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        {/* 🔁 검색창 다음 */}
+        <input
+          type="text"
+          placeholder="이름 또는 이메일로 검색하세요"
+          className="border px-3 py-2 rounded w-full sm:w-70"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-          <button type="submit" className="bg-[#192a48] text-white px-4 py-2 rounded cursor-pointer">조회</button>
-        </form>
+        <button type="submit" className="bg-[#192a48] text-white px-4 py-2 rounded cursor-pointer">조회</button>
+      </form>
 
-        {/* 액션버튼 */}
-        <div className="flex justify-end gap-2 mb-2 text-sm">
-          <select
-            value={roleToUpdate}
-            onChange={(e) => setRoleToUpdate(e.target.value)}
-            className="border border-gray-400 rounded px-2 py-1 cursor-pointer"
-          >
-            <option value="">등급 수정</option>
-            <option value="USER">일반회원</option>
-            <option value="INSTRUCTOR">강사</option>
-          </select>
-          <button onClick={handleUpdateRole} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 cursor-pointer">수정</button>
-          <ExcelExportButton
-            data={filtered}
-            filename="회원목록"
-            columns={[{ key: 'userId', label: 'ID' }, { key: 'usersName', label: '이름' }, { key: 'userEmail', label: '이메일' }, { key: 'userRole', label: '등급' }]}
-          />
-          <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 cursor-pointer">프린트</button>
-        </div>
+      {/* 액션버튼 */}
+      <div className="flex flex-wrap justify-end gap-2 mb-2 text-sm">
+        <select
+          value={roleToUpdate}
+          onChange={(e) => setRoleToUpdate(e.target.value)}
+          className="border border-gray-400 rounded px-2 py-1 cursor-pointer"
+        >
+          <option value="">등급 수정</option>
+          <option value="USER">일반회원</option>
+          <option value="INSTRUCTOR">강사</option>
+        </select>
+        <button onClick={handleUpdateRole} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 cursor-pointer">수정</button>
+        <ExcelExportButton
+          data={filtered}
+          filename="회원목록"
+          columns={[{ key: 'userId', label: 'ID' }, { key: 'usersName', label: '이름' }, { key: 'userEmail', label: '이메일' }, { key: 'userRole', label: '등급' }]}
+        />
+        <button onClick={() => window.print()} className="border border-gray-400 bg-white px-3 py-1 rounded hover:bg-gray-50 cursor-pointer">프린트</button>
+      </div>
 
-        {/* 테이블 */}
-        <table 
+      {/* 테이블 */}
+      <div className="overflow-x-auto">
+        <table
           id="print-area"
-          className="w-full text-sm border-t border-b border-gray-300 text-left"
+          className="w-full text-sm border-t border-b border-gray-300 text-left min-w-[700px]"
         >
           <thead className="bg-gray-100 border-b border-gray-300">
             <tr>
@@ -158,9 +155,9 @@ export default function UserList() {
               <th className="px-2 py-2">ID</th>
               <th className="px-2 py-2">이름</th>
               <th className="px-2 py-2">이메일</th>
-              <th className="px-2 py-2">전화번호</th>
-              <th className="px-2 py-2">성별</th>
-              <th className="px-2 py-2">생년월일</th>
+              <th className="px-2 py-2 hidden sm:table-cell">전화번호</th>
+              <th className="px-2 py-2 hidden md:table-cell">성별</th>
+              <th className="px-2 py-2 hidden md:table-cell">생년월일</th>
               <th className="px-2 py-2">등급</th>
             </tr>
           </thead>
@@ -182,30 +179,30 @@ export default function UserList() {
                   <td className="px-2 py-2">{user.userId}</td>
                   <td className="px-2 py-2">{user.usersName}</td>
                   <td className="px-2 py-2">{user.userEmail}</td>
-                  <td className="px-2 py-2">{user.userPhone}</td>
-                  <td className="px-2 py-2">{user.userGender}</td>
-                  <td className="px-2 py-2">{user.userBirth ? dayjs(user.userBirth).format('YYYY-MM-DD') : ''}</td>
+                  <td className="px-2 py-2 hidden sm:table-cell">{user.userPhone}</td>
+                  <td className="px-2 py-2 hidden md:table-cell">{user.userGender}</td>
+                  <td className="px-2 py-2 hidden md:table-cell">{user.userBirth ? dayjs(user.userBirth).format('YYYY-MM-DD') : ''}</td>
                   <td className="px-2 py-2">{getRoleName(user.userRole)}</td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
+      </div>
 
-        {/* 페이징 */}
-        <div className="mt-6 flex items-center justify-between relative">
-          <div className="text-sm">
-            <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm">
-              <option value={10}>10개씩</option>
-              <option value={20}>20개씩</option>
-              <option value={30}>30개씩</option>
-            </select>
-          </div>
-          <div className="absolute left-1/2 transform -translate-x-1/2">
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={(page) => setCurrentPage(page)} />
-          </div>
+      {/* 페이징 */}
+      <div className="mt-6 flex items-center justify-between relative">
+        <div className="text-sm">
+          <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))} className="border rounded px-2 py-1 border-gray-400 text-sm">
+            <option value={10}>10개씩</option>
+            <option value={20}>20개씩</option>
+            <option value={30}>30개씩</option>
+          </select>
         </div>
-      </main>
-    </div>
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={(page) => setCurrentPage(page)} />
+        </div>
+      </div>
+    </AdminLayout>
   );
 }

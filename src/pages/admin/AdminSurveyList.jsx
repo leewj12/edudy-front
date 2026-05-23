@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import ExcelExportButton from '../../component/admin/ExcelExportButton';
@@ -120,11 +119,9 @@ export default function AdminSurveyList() {
   }));
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="만족도 조사 목록" description="등록된 설문 목록을 확인합니다." />
-        <Header />
 
         <h1 className="text-2xl font-bold mb-6">만족도 조사 목록</h1>
 
@@ -259,7 +256,7 @@ export default function AdminSurveyList() {
           </div>
         )}
 
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

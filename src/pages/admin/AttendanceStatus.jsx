@@ -166,9 +166,8 @@
 //     searchFromDate.toDateString() === searchToDate.toDateString();
 
 //   return (
-//     <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-//       <Sidebar />
-//       <main className="flex-1 overflow-y-auto bg-white p-6">
+//     <AdminLayout>
+//       
 //         <PageMeta title="출결 현황" description="수강생 출석 현황을 확인합니다." />
 //         <Header />
 //         <h1 className="text-2xl font-bold p-6">출결 현황</h1>
@@ -322,7 +321,7 @@
 //             pagesPerGroup={5}
 //           />
 //         </section>
-//       </main>
+//       
 //     </div>
 //   );
 // }
@@ -331,8 +330,7 @@
 
 // AttendanceStatus.jsx
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import Pagination from '../../components/Pagination';
 import axios from '../../api/axiosInstance';
@@ -498,11 +496,9 @@ export default function AttendanceStatus() {
   const dateHeaders = paginatedDateRange();
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="출결 현황" description="수강생 출석 현황을 확인합니다." />
-        <Header />
         <h1 className="text-2xl font-bold p-6">출결 현황</h1>
 
         <section className="bg-white p-6">
@@ -615,7 +611,7 @@ export default function AttendanceStatus() {
             />
           </div>
         </section>
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

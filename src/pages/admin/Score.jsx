@@ -1,7 +1,6 @@
 // 전체 코드: 성적 관리 페이지 (3스텝 포함 전부 수정 반영)
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import dayjs from 'dayjs';
@@ -97,35 +96,35 @@ export default function Score() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6 text-sm">
-        <PageMeta title="성적 관리" description="과정/수강생/성적을 단계적으로 관리합니다." />
-        <Header />
+    <AdminLayout>
+      <PageMeta title="성적 관리" description="과정/수강생/성적을 단계적으로 관리합니다." />
 
+      <div className="text-sm">
         {step === 1 && (
           <div>
             <h2 className="text-xl font-semibold mb-4">진행 중인 과정</h2>
-            <table className="w-full border-t border-gray-200 text-left">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="py-2 px-3">과정명</th>
-                  <th className="py-2 px-3">ID</th>
-                  <th className="py-2 px-3">인원</th>
-                  <th className="py-2 px-3">기간</th>
-                </tr>
-              </thead>
-              <tbody>
-                {courses.map((c) => (
-                  <tr key={c.lectureId} className="border-b hover:bg-gray-50 cursor-pointer border-gray-200" onClick={() => handleCourseClick(c)}>
-                    <td className="py-2 px-3 font-semibold">{c.lectureTitle}</td>
-                    <td className="py-2 px-3">{c.lectureId}</td>
-                    <td className="py-2 px-3">{c.lectureEnrolled}명</td>
-                    <td className="py-2 px-3">{c.lectureStart} ~ {c.lectureEnd}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full border-t border-gray-200 text-left min-w-[500px]">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="py-2 px-3">과정명</th>
+                    <th className="py-2 px-3">ID</th>
+                    <th className="py-2 px-3">인원</th>
+                    <th className="py-2 px-3">기간</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {courses.map((c) => (
+                    <tr key={c.lectureId} className="border-b hover:bg-gray-50 cursor-pointer border-gray-200" onClick={() => handleCourseClick(c)}>
+                      <td className="py-2 px-3 font-semibold">{c.lectureTitle}</td>
+                      <td className="py-2 px-3">{c.lectureId}</td>
+                      <td className="py-2 px-3">{c.lectureEnrolled}명</td>
+                      <td className="py-2 px-3 whitespace-nowrap">{c.lectureStart} ~ {c.lectureEnd}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
@@ -135,24 +134,26 @@ export default function Score() {
             {students.length === 0 ? (
               <p className="text-gray-500">등록된 수강생이 없습니다.</p>
             ) : (
-              <table className="w-full border-t border-gray-200 text-left">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="py-2 px-3">이름</th>
-                    <th className="py-2 px-3">전화번호</th>
-                    <th className="py-2 px-3">생년월일</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.map((s) => (
-                    <tr key={s.lecturePartId} className="border-b hover:bg-gray-50 cursor-pointer border-gray-200" onClick={() => handleStudentClick(s)}>
-                      <td className="py-2 px-3 font-semibold">{s.userName}</td>
-                      <td className="py-2 px-3">{s.userPhone}</td>
-                      <td className="py-2 px-3">{dayjs(s.userBirth).format('YYMMDD')}</td>
+              <div className="overflow-x-auto">
+                <table className="w-full border-t border-gray-200 text-left min-w-[400px]">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="py-2 px-3">이름</th>
+                      <th className="py-2 px-3">전화번호</th>
+                      <th className="py-2 px-3">생년월일</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {students.map((s) => (
+                      <tr key={s.lecturePartId} className="border-b hover:bg-gray-50 cursor-pointer border-gray-200" onClick={() => handleStudentClick(s)}>
+                        <td className="py-2 px-3 font-semibold">{s.userName}</td>
+                        <td className="py-2 px-3">{s.userPhone}</td>
+                        <td className="py-2 px-3">{dayjs(s.userBirth).format('YYMMDD')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
             <div className="flex justify-center mt-6">
               <button onClick={() => setStep(1)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">과정 목록으로</button>
@@ -162,13 +163,11 @@ export default function Score() {
 
         {step === 3 && (
           <div>
-            <div className="flex justify-between mb-4">
+            <div className="flex flex-col sm:flex-row justify-between mb-4 gap-3">
               <h2 className="text-xl font-semibold">[{selectedStudent.userName}] 성적 관리</h2>
-              <div className="space-x-2">
+              <div className="flex flex-wrap gap-2">
                 <button onClick={() => setIsModalOpen(true)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">+ 추가</button>
                 <button onClick={handleDelete} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm cursor-pointer">삭제</button>
-                {/* <button onClick={handleDownload} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">엑셀 다운로드</button> */}
-                
 
                 <ExcelExportButton
                   data={scores} // ✅ 이거였지 scoreList 아님
@@ -188,8 +187,8 @@ export default function Score() {
 
             {scores.length > 0 ? (
               <>
-                <div id="print-area">
-                  <table className="w-full border-t border-gray-200 text-center">
+                <div id="print-area" className="overflow-x-auto">
+                  <table className="w-full border-t border-gray-200 text-center min-w-[600px]">
                     <thead className="bg-gray-50 border-b border-gray-200">
                       <tr>
                         <th className="print:hidden"><input type="checkbox" checked={scores.length > 0 && checkedScores.length === scores.length} onChange={(e) => {
@@ -217,7 +216,7 @@ export default function Score() {
                               onChange={() => toggleCheck(s.lectureScoreId)}
                             />
                           </td>
-                          <td className="py-2 px-3">{s.lectureProjectDay}</td>
+                          <td className="py-2 px-3 whitespace-nowrap">{s.lectureProjectDay}</td>
                           <td className="py-2 px-3">{s.lectureProjectCategory}</td>
                           <td className="py-2 px-3">{s.lectureProject}</td>
                           <td className="py-2 px-3">{s.lectureProjectScore != null ? `${s.lectureProjectScore}점` : '-'}</td>
@@ -270,13 +269,13 @@ export default function Score() {
         )}
 
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
               <h3 className="text-lg font-semibold mb-4">{modalMode === 'create' ? '성적 추가' : '성적 수정'}</h3>
               <form onSubmit={handleModalSubmit} className="space-y-3">
-                <input type="date" value={form.day} onChange={(e) => setForm({ ...form, day: e.target.value })} className="w-full border px-3 py-2" required />
-                <input type="text" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} placeholder="구분*" className="w-full border px-3 py-2" required />
-                <input type="text" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="과목명*" className="w-full border px-3 py-2" required />
+                <input type="date" value={form.day} onChange={(e) => setForm({ ...form, day: e.target.value })} className="w-full border px-3 py-2 rounded" required />
+                <input type="text" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} placeholder="구분*" className="w-full border px-3 py-2 rounded" required />
+                <input type="text" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="과목명*" className="w-full border px-3 py-2 rounded" required />
                 <input
                 type="number"
                 min="0"
@@ -284,19 +283,19 @@ export default function Score() {
                 value={form.score}
                 onChange={(e) => setForm({ ...form, score: e.target.value })}
                 placeholder="점수*"
-                className="w-full border px-3 py-2"
+                className="w-full border px-3 py-2 rounded"
                 required
               />
-                <input type="text" value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })} placeholder="비고 (선택)" className="w-full border px-3 py-2" />
+                <input type="text" value={form.comment} onChange={(e) => setForm({ ...form, comment: e.target.value })} placeholder="비고 (선택)" className="w-full border px-3 py-2 rounded" />
                 <div className="flex justify-end gap-2 pt-2">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">닫기</button>
-                  <button type="submit" className="border border-gray-400 bg-white px-4 py-1 rounded hover:bg-gray-50 text-sm">{modalMode === 'create' ? '등록' : '수정'}</button>
+                  <button type="submit" className="bg-[#192a48] text-white px-4 py-1 rounded hover:bg-[#142033] text-sm">{modalMode === 'create' ? '등록' : '수정'}</button>
                 </div>
               </form>
             </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 }

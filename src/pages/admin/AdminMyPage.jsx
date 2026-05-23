@@ -1,7 +1,6 @@
 // src/pages/admin/AdminMyPage.jsx
 import React, { useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import { useAuth } from '../../context/AuthContext';
 import { jwtDecode } from 'jwt-decode';
@@ -43,11 +42,9 @@ export default function AdminMyPage() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="관리자 마이페이지" description="내 정보와 활동 현황을 확인할 수 있습니다." />
-        <Header />
         <h1 className="text-2xl font-bold ml-5 mb-6">내 정보</h1>
         <section className="bg-white p-6  max-w-[1300px] mx-auto">
           <div className="space-y-10 text-sm">
@@ -129,7 +126,7 @@ export default function AdminMyPage() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

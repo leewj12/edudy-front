@@ -7,7 +7,7 @@
 
 // export default function LectureForm() {
 //   const navigate = useNavigate();
-//   const [categoryList, setCategoryList] = useState([]); //카테고리 목록 
+//   const [categoryList, setCategoryList] = useState([]); //카테고리 목록
 
 //   useEffect(() => {
 //     const fetchCategories = async () => {
@@ -19,14 +19,14 @@
 //         console.error("카테고리 목록 불러오기 실패", err);
 //       }
 //     };
-  
+
 //     fetchCategories();
 //   }, []);
 
 //   const [form, setForm] = useState({
 //     lectureCategory: '',
 //     lectureTitle: '',
-//     lectureShortTitle: '', 
+//     lectureShortTitle: '',
 //     lecturePostcode: '',
 //     lectureAddress: '',
 //     lectureAddressDetail: '',
@@ -95,7 +95,7 @@
 //       for (let [key, value] of formData.entries()) {
 //         console.log(`${key}:`, value); // <-- 여기가 중요!
 //       }
-    
+
 //       await axios.post('/admin/lecture', formData, {
 //         headers: { 'Content-Type': 'multipart/form-data' },
 //       });
@@ -127,9 +127,9 @@
 //                     카테고리<span className="text-red-500">*</span>
 //                   </td>
 //                   <td className="border border-gray-300 px-3 py-2">
-//                     <select 
-//                       name="lectureCategory" 
-//                       value={form.lectureCategory} 
+//                     <select
+//                       name="lectureCategory"
+//                       value={form.lectureCategory}
 //                       onChange={handleChange}
 //                       className="w-full border border-gray-300 rounded px-3 py-2"
 //                       required
@@ -351,15 +351,14 @@
 // }
 
 import React, { useState , useEffect  } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 export default function LectureForm() {
   const navigate = useNavigate();
-  const [categoryList, setCategoryList] = useState([]); //카테고리 목록 
+  const [categoryList, setCategoryList] = useState([]); //카테고리 목록
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -370,14 +369,14 @@ export default function LectureForm() {
         console.error("카테고리 목록 불러오기 실패", err);
       }
     };
-  
+
     fetchCategories();
   }, []);
 
   const [form, setForm] = useState({
     lectureCategory: '',
     lectureTitle: '',
-    lectureShortTitle: '', 
+    lectureShortTitle: '',
     lecturePostcode: '',
     lectureAddress: '',
     lectureAddressDetail: '',
@@ -421,12 +420,12 @@ export default function LectureForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!form.lecturePostcode || !form.lectureAddress || !form.lectureAddressDetail.trim()) {
       alert('주소 정보를 모두 입력해주세요.');
       return;
     }
-  
+
     const requestBody = {
       lecture: {
         lectureTitle: form.lectureTitle,
@@ -465,24 +464,24 @@ export default function LectureForm() {
       },
       subjectTitles: form.lectureCurriculum.filter(Boolean),
     };
-  
+
     const formData = new FormData();
     formData.append(
       'request',
       new Blob([JSON.stringify(requestBody)], { type: 'application/json' })
     );
-  
+
     if (LectureThumbnail) formData.append('thumbnailFile', LectureThumbnail);
     if (LectureContentImage) formData.append('contentImageFile', LectureContentImage);
-  
+
     try {
       for (let [key, value] of formData.entries()) {
       }
-  
+
       await axios.post('/admin/lecture/subjects', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-  
+
       alert('과정이 성공적으로 등록되었습니다.');
       navigate('/admin/lecture/list');
     } catch (err) {
@@ -492,27 +491,24 @@ export default function LectureForm() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
-        <PageMeta title="과정 등록" description="새로운 과정를 등록할 수 있습니다." />
-        <Header />
+    <AdminLayout>
+      <PageMeta title="과정 등록" description="새로운 과정를 등록할 수 있습니다." />
 
-        <section className="bg-white p-6 rounded-lg min-w-[1200px]">
-          <h1 className="text-2xl font-bold mb-6">과정 등록</h1>
+      <section className="bg-white p-4 md:p-6 rounded-xl">
+        <h1 className="text-2xl font-bold mb-6">과정 등록</h1>
 
-          <form onSubmit={handleSubmit} className="w-full">
-
-            <table className="w-full border border-gray-300 text-sm">
+        <form onSubmit={handleSubmit} className="w-full">
+          <div className="overflow-x-auto">
+            <table className="w-full border border-gray-300 text-sm min-w-[500px]">
               <tbody>
                 <tr>
-                  <td className="w-40 font-medium border border-gray-300 px-3 py-2">
+                  <td className="w-28 md:w-40 font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     카테고리<span className="text-red-500">*</span>
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <select 
-                      name="lectureCategory" 
-                      value={form.lectureCategory} 
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <select
+                      name="lectureCategory"
+                      value={form.lectureCategory}
                       onChange={handleChange}
                       className="w-full border border-gray-300 rounded px-3 py-2"
                       required
@@ -525,10 +521,13 @@ export default function LectureForm() {
                       ))}
                     </select>
                   </td>
-                  <td className="w-40 font-medium border border-gray-300 px-3 py-2">
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     과정명<span className="text-red-500">*</span>
                   </td>
-                  <td className="border border-gray-300 px-3 py-2">
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     <input
                       type="text"
                       name="lectureTitle"
@@ -541,7 +540,7 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     요약 과정명<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -559,7 +558,23 @@ export default function LectureForm() {
                       required
                     />
                   </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">
+                    최대 인원<span className="text-red-500">*</span>
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input
+                      type="number"
+                      name="lectureCapacity"
+                      value={form.lectureCapacity}
+                      onChange={handleChange}
+                      min="1"
+                      className="w-full border border-gray-300 rounded px-3 py-2"
+                      required
+                    />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     최대 인원<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -576,27 +591,39 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">과정 내용 이미지</td>
-                  <td className="border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">내용 이미지</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
                     <input type="file" accept="image/*" onChange={(e) => setLectureContentImage(e.target.files[0])}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
-                  </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">썸네일 이미지</td>
-                  <td className="border border-gray-300 px-3 py-2">
-                    <input type="file" accept="image/*" onChange={(e) => setLectureThumbnail(e.target.files[0])}
-                      className="w-full border border-gray-300 rounded px-3 py-2" />
+                      className="w-full text-sm" />
                   </td>
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">썸네일</td>
+                  <td className="border border-gray-300 px-3 py-2" colSpan="3">
+                    <input type="file" accept="image/*" onChange={(e) => setLectureThumbnail(e.target.files[0])}
+                      className="w-full text-sm" />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     시작 시간<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="time" name="lectureStartTime" value={form.lectureStartTime} onChange={handleChange}
                       className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">
+                    종료 시간<span className="text-red-500">*</span>
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input type="time" name="lectureEndTime" value={form.lectureEndTime} onChange={handleChange}
+                      className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     종료 시간<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -606,14 +633,23 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     시작일<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
                     <input type="date" name="lectureStart" value={form.lectureStart} onChange={handleChange}
                       className="w-full border border-gray-300 rounded px-3 py-2" required />
                   </td>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50 hidden md:table-cell">
+                    종료일<span className="text-red-500">*</span>
+                  </td>
+                  <td className="border border-gray-300 px-3 py-2 hidden md:table-cell">
+                    <input type="date" name="lectureEnd" value={form.lectureEnd} onChange={handleChange}
+                      className="w-full border border-gray-300 rounded px-3 py-2" required />
+                  </td>
+                </tr>
+                <tr className="md:hidden">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     종료일<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2">
@@ -623,7 +659,7 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     우편번호<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
@@ -648,7 +684,7 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     주소<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
@@ -658,7 +694,7 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     상세 주소<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
@@ -668,7 +704,7 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2">
+                  <td className="font-medium border border-gray-300 px-3 py-2 bg-gray-50">
                     과정 설명
                   </td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
@@ -678,7 +714,7 @@ export default function LectureForm() {
                 </tr>
 
                 <tr>
-                  <td className="font-medium border border-gray-300 px-3 py-2 align-top">
+                  <td className="font-medium border border-gray-300 px-3 py-2 align-top bg-gray-50">
                     과목<span className="text-red-500">*</span>
                   </td>
                   <td className="border border-gray-300 px-3 py-2" colSpan="3">
@@ -719,16 +755,16 @@ export default function LectureForm() {
                 </tr>
               </tbody>
             </table>
+          </div>
 
-            <div className="pt-6 flex justify-end gap-3">
-              <button type="button" onClick={() => navigate('/admin/lecture/list')}
-                className="px-4 py-2 border border-gray-400 rounded">취소</button>
-              <button type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">등록</button>
-            </div>
-          </form>
-        </section>
-      </main>
-    </div>
+          <div className="pt-6 flex justify-end gap-3">
+            <button type="button" onClick={() => navigate('/admin/lecture/list')}
+              className="px-4 py-2 border border-gray-400 rounded hover:bg-gray-50">취소</button>
+            <button type="submit"
+              className="bg-[#192a48] hover:bg-[#142033] text-white px-6 py-2 rounded">등록</button>
+          </div>
+        </form>
+      </section>
+    </AdminLayout>
   );
 }

@@ -1,7 +1,6 @@
 // 상담 관리 페이지 전체 코드 (토큰 제거 버전)
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import dayjs from 'dayjs';
@@ -154,11 +153,9 @@ const getKeywordLabel = (type, keyword) => {
       });
   };
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6 text-sm">
+    <AdminLayout>
+      
         <PageMeta title="상담 관리" description="과정별 수강생의 상담 목록을 관리합니다." />
-        <Header />
 
         {!selectedCourse && (
           <div>
@@ -472,7 +469,7 @@ const getKeywordLabel = (type, keyword) => {
             </div>
           </div>
         )}
-  </main>
-</div>
+  
+</AdminLayout>
 );
 }

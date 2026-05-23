@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import TrainModal from '../../components/admintrain/TrainModal';
 import axios from '../../api/axiosInstance';
@@ -138,11 +137,9 @@ export default function TrainDetail() {
   }, [lectureId]);
 
   return (
-    <div className="flex w-screen min-w-[1400px]">
-      <Sidebar />
+    <div className="flex w-screen ">
       <main className="flex-1 bg-white p-6">
         <PageMeta title="훈련일지 목록" description="선택한 과정의 훈련일지를 관리합니다." />
-        <Header />
         <h1 className="text-2xl font-bold mb-2">훈련일지 목록</h1>
         <p className="text-gray-600 ml-1 mb-4">
           {lectureTitle} ({lectureStart} ~ {lectureEnd})
@@ -238,7 +235,7 @@ export default function TrainDetail() {
             lectureId={lectureId}
           />
         )}
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

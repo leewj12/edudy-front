@@ -89,9 +89,8 @@
 //   };
 
 //   return (
-//     <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-//       <Sidebar />
-//       <main className="flex-1 overflow-y-auto bg-white p-6">
+//     <AdminLayout>
+//       
 //         <PageMeta title="만족도 조사" description="만족도 조사 등록" />
 //         <Header />
 //         <h1 className="text-2xl font-bold mb-6">만족도 조사</h1>
@@ -176,14 +175,13 @@
 //             등록
 //           </button>
 //         </div>
-//       </main>
+//       
 //     </div>
 //   );
 // }
 
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 import dayjs from 'dayjs';
@@ -272,11 +270,9 @@ export default function AdminSurvey() {
   };
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
+    <AdminLayout>
+      
         <PageMeta title="만족도 조사" description="만족도 조사 등록" />
-        <Header />
         <h1 className="text-2xl font-bold mb-6">만족도 조사</h1>
 
         {/* <div className="mb-4">
@@ -408,7 +404,7 @@ export default function AdminSurvey() {
             등록
           </button>
         </div>
-      </main>
-    </div>
+      
+    </AdminLayout>
   );
 }

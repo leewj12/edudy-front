@@ -1,8 +1,7 @@
 // src/pages/admin/LectureDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar';
-import Header from '../../components/Header';
+import AdminLayout from '../../components/AdminLayout';
 import PageMeta from '../../components/PageMeta';
 import axios from '../../api/axiosInstance';
 
@@ -36,16 +35,14 @@ export default function LectureDetail() {
   if (!lecture) return null;
 
   return (
-    <div className="flex w-screen h-screen overflow-hidden min-w-[1400px]">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto bg-white p-6">
-        <PageMeta title="과정 상세 조회" description="과정 정보를 확인합니다." />
-        <Header />
+    <AdminLayout>
+      <PageMeta title="과정 상세 조회" description="과정 정보를 확인합니다." />
 
-        <section className="bg-white p-6 rounded-lg min-w-[1200px]">
-          <h1 className="text-2xl font-bold mb-6">과정 상세 정보</h1>
+      <section className="bg-white p-4 md:p-6 rounded-xl">
+        <h1 className="text-2xl font-bold mb-6">과정 상세 정보</h1>
 
-          <table className="w-full border border-gray-300 text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full border border-gray-300 text-sm min-w-[500px]">
             <tbody>
               {/* <Row label="카테고리" value={categoryMap[lecture.lectureCategoryId] || '-'} /> */}
               <Row label="과정명" value={lecture.lectureTitle} />
@@ -70,25 +67,25 @@ export default function LectureDetail() {
               /> */}
             </tbody>
           </table>
+        </div>
 
-          <div className="pt-6 flex justify-end">
-            <button
-              type="button"
-              onClick={() => navigate('/admin/lecture/list')}
-              className="px-4 py-2 border border-gray-400 rounded"
-            >
-              목록으로
-            </button>
-          </div>
-        </section>
-      </main>
-    </div>
+        <div className="pt-6 flex justify-end">
+          <button
+            type="button"
+            onClick={() => navigate('/admin/lecture/list')}
+            className="px-4 py-2 border border-gray-400 rounded hover:bg-gray-50"
+          >
+            목록으로
+          </button>
+        </div>
+      </section>
+    </AdminLayout>
   );
 }
 
 const Row = ({ label, value }) => (
   <tr>
-    <td className="w-40 font-medium border border-gray-300 px-3 py-2">{label}</td>
+    <td className="w-28 md:w-40 font-medium border border-gray-300 px-3 py-2 bg-gray-50">{label}</td>
     <td className="border border-gray-300 px-3 py-2" colSpan="3">
       <div className="min-h-[30px]">{value}</div>
     </td>
